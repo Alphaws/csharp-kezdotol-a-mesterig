@@ -462,6 +462,17 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <li><a href="#17-fejezetzaro-gyakorlatok-es-feladatok"><span class="toc-label">1.7 Fejezetzáró gyakorlatok és feladatok</span><span class="toc-leader"></span><span class="toc-page-number">14</span></a></li>
 </ul>
 </li>
+<li><a href="#2-valtozok-elemi-tipusok-es-a-memoriamodell-stack-vs-heap"><span class="toc-label">2. Változók, elemi típusok és a Memóriamodell (Stack vs. Heap)</span><span class="toc-leader"></span><span class="toc-page-number">16</span></a><ul>
+<li><a href="#21-mi-az-a-valtozo-es-hogyan-deklaraljuk-a-c-ban"><span class="toc-label">2.1 Mi az a változó, és hogyan deklaráljuk a C#-ban?</span><span class="toc-leader"></span><span class="toc-page-number">16</span></a></li>
+<li><a href="#22-a-c-memoriamodellje-stack-verem-vs-heap-kupac"><span class="toc-label">2.2 A C# Memóriamodellje: Stack (Verem) vs. Heap (Kupac)</span><span class="toc-leader"></span><span class="toc-page-number">17</span></a></li>
+<li><a href="#23-ertektipusok-value-types-vs-referenciatipusok-reference-types"><span class="toc-label">2.3 Értéktípusok (Value Types) vs. Referenciatípusok (Reference Types)</span><span class="toc-leader"></span><span class="toc-page-number">18</span></a></li>
+<li><a href="#24-elemi-adattipusok-osszefoglalo-tablazata"><span class="toc-label">2.4 Elemi adattípusok összefoglaló táblázata</span><span class="toc-leader"></span><span class="toc-page-number">19</span></a></li>
+<li><a href="#25-szovegek-string-immutabilitas-es-string-interpolacio"><span class="toc-label">2.5 Szövegek (string): Immutabilitás és String Interpoláció</span><span class="toc-leader"></span><span class="toc-page-number">20</span></a></li>
+<li><a href="#26-a-milliard-dollaros-hiba-kivedese-nullable-reference-types-t"><span class="toc-label">2.6 A „Milliárd Dolláros Hiba” kivédése: Nullable Reference Types (T?)</span><span class="toc-leader"></span><span class="toc-page-number">21</span></a></li>
+<li><a href="#27-reszletes-gyakorlati-esettanulmany-valutakonverzios-es-szamlazo-penzugyi-motor"><span class="toc-label">2.7 Részletes Gyakorlati Esettanulmány: Valutakonverziós és Számlázó Pénzügyi Motor</span><span class="toc-leader"></span><span class="toc-page-number">21</span></a></li>
+<li><a href="#28-fejezetzaro-osszefoglalo-es-gyakorlatok"><span class="toc-label">2.8 Fejezetzáró összefoglaló és gyakorlatok</span><span class="toc-leader"></span><span class="toc-page-number">24</span></a></li>
+</ul>
+</li>
 </ul>
 </div>
 
@@ -777,8 +788,413 @@ git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </sp
 <li><strong>Top-Level Statements:</strong> Modern C# nyelvi funkció, amellyel a felesleges <code>class Program</code> és <code>static void Main</code> burkoló kód elhagyható.</li>
 <li><strong>String Interpoláció (<code>$""</code>):</strong> Szövegformázási technika, amellyel változókat közvetlenül a szövegbe ágyazhatunk: <code>$"Helló {nev}!"</code>.</li>
 </ul>
+<div class="chapter-break"></div>
+
+<h1 id="2-valtozok-elemi-tipusok-es-a-memoriamodell-stack-vs-heap">2. Változók, elemi típusok és a Memóriamodell (Stack vs. Heap)</h1>
+<p>A számítógépes programozás legmélyebb lényege az adatok felvétele, memóriában való elhelyezése, logikai átalakítása és biztonságos kezelése. Míg a dinamikus nyelvekben (mint a Python vagy a JavaScript) a változók típusai futásidőben szabadon változhatnak, a modern C# egy <strong>erősen típusos, statikusan ellenőrzött nyelv</strong>.</p>
+<p>Ez azt jelenti, hogy a C# fordítóprogramja (Roslyn) még azelőtt ellenőrzi a típusok összeférhetőségét, hogy a program egyetlen sora is lefutna a számítógépen. Ha egy szöveghez számot akarsz hozzáadni, a C# azonnal hibát jelez a szerkesztődben, megelőzve az éles szervereken felbukkanó váratlan leállásokat.</p>
+<p>Ebben a fejezetben megértjük a változók logikáját, leleplezzük a számítógép memóriájának két nagy birodalmát: a <strong>Stack (Verem)</strong> és a <strong>Heap (Kupac)</strong> működését, megismerjük az értéktípusok és referenciatípusok közötti döntő különbséget, elsajátítjuk a <code>var</code> kulcsszó intelligens típusinferenciáját, a pénzügyi számításokhoz kötelező <code>decimal</code> típust, valamint a modern C# egyik legnagyobb innovációját: a <strong>Nullable Reference Types</strong> rendszert, amellyel végleg száműzhetjük a szoftverfejlesztés rettegett „milliárd dolláros hibáját”, a <code>NullReferenceException</code>-t.</p>
+<p>A fejezet végén egy komplett, éles <strong>Webáruház Pénzügyi Számlázó és Valutakonverziós Esettanulmányt</strong> valósítunk meg!</p>
+<hr />
+<h2 id="21-mi-az-a-valtozo-es-hogyan-deklaraljuk-a-c-ban">2.1 Mi az a változó, és hogyan deklaráljuk a C#-ban?</h2>
+<p>A változó egy elnevezett rekesz a számítógép munkamemóriájában (RAM), amelyben meghatározott típusú adatot tárolunk.</p>
+<p>A klasszikus C# szintaxisban a változó deklarálásakor először megadjuk a <strong>típust</strong>, utána a változó <strong>nevét</strong>, majd az értékadó operátorral (<code>=</code>) hozzárendeljük a kezdőértéket:</p>
+<div class="highlight"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="n">eletkor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">34</span><span class="p">;</span>
+<span class="kt">string</span><span class="w"> </span><span class="n">felhasznaloNev</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;kovacs_bela&quot;</span><span class="p">;</span>
+<span class="kt">double</span><span class="w"> </span><span class="n">egyenleg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">15420.50</span><span class="p">;</span>
+<span class="kt">bool</span><span class="w"> </span><span class="n">aktivTagsag</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">true</span><span class="p">;</span>
+</code></pre></div>
+
+<h3 id="az-intelligens-tipusinferencia-a-var-kulcsszo">Az intelligens típusinferencia: a <code>var</code> kulcsszó</h3>
+<p>A C# 3.0 óta nem szükséges kézzel kiírnod a típus nevét, ha a jobb oldalon álló értékből a fordító számára 100%-ban egyértelmű, hogy milyen típusról van szó. Erre szolgál a <strong><code>var</code></strong> kulcsszó:</p>
+<div class="highlight"><pre><span></span><code><span class="kt">var</span><span class="w"> </span><span class="n">pontszam</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">100</span><span class="p">;</span><span class="w">                 </span><span class="c1">// A fordító automatikusan &#39;int&#39; típusként kezeli!</span>
+<span class="kt">var</span><span class="w"> </span><span class="n">arfolyam</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">398.50</span><span class="p">;</span><span class="w">              </span><span class="c1">// A fordító automatikusan &#39;double&#39; típusként kezeli!</span>
+<span class="kt">var</span><span class="w"> </span><span class="n">uzenet</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Rendszer elindult&quot;</span><span class="p">;</span><span class="w">   </span><span class="c1">// A fordító automatikusan &#39;string&#39; típusként kezeli!</span>
+</code></pre></div>
+
+<blockquote>
+<p>[!IMPORTANT] A <code>var</code> nem jelent dinamikus típust!
+Nagyon sok, Pythonból vagy JavaScriptből érkező tanuló tévesen azt hiszi, hogy a <code>var</code> a C#-ban olyan, mint a Python dinamikus változói vagy a JavaScript <code>let/var</code> kulcsszava.
+<strong>Ez óriási tévedés!</strong> A C#-ban a <code>var</code> <strong>statikus típusosságot jelent</strong>:
+<code>csharp
+var szam = 42;  // A 'szam' változó típusa végérvényesen 'int' lett a fordítás pillanatában!
+// szam = "negyvenketto";  &lt;-- FORDÍTÁSI HIBA! CS0029: Cannot implicitly convert type 'string' to 'int'</code>
+A <code>var</code> csupán gépelést takarít meg a programozónak (Syntax Sugar), a kód futási sebessége és típusbiztonsága pontosan ugyanaz, mintha kiírtad volna, hogy <code>int</code>.</p>
+</blockquote>
+<h3 id="nevadasi-konvenciok-c-ipari-szabvany">Névadási konvenciók (C# Ipari Szabvány):</h3>
+<ul>
+<li><strong><code>camelCase</code>:</strong> Kis kezdőbetű, minden további szó nagybetűvel indul. Helyi változókhoz és metódusparaméterekhez kötelező: <code>felhasznaloNev</code>, <code>aktualisEgyenleg</code>, <code>maxProbalkozas</code>.</li>
+<li><strong><code>PascalCase</code>:</strong> Nagy kezdőbetű minden szónál. Osztályokhoz, metódusokhoz, tulajdonságokhoz (Properties) és konstansokhoz kötelező: <code>CalculateInvoice()</code>, <code>CustomerName</code>.</li>
+</ul>
+<hr />
+<h2 id="22-a-c-memoriamodellje-stack-verem-vs-heap-kupac">2.2 A C# Memóriamodellje: Stack (Verem) vs. Heap (Kupac)</h2>
+<p>A mély és magabiztos C# tudás legfontosabb sarokköve annak megértése, hogy hogyan gazdálkodik a program a memóriával. A .NET futtatókörnyezetben (CLR) a memória két nagy területre oszlik:</p>
+<div class="highlight"><pre><span></span><code>       STACK (Verem)                                HEAP (Kupac)
+  ┌───────────────────────┐                  ┌───────────────────────────────┐
+  │ • Villámgyors LIFO    │                  │ • Dinamikus, óriási terület   │
+  │ • CPU hardveres szint │                  │ • Itt élnek az összetett      │
+  │ • Értéktípusok (int)  │                  │   objektumok és stringek      │
+  │ • Referenciák mutatói │ ───────────────► │ • A Garbage Collector (GC)   │
+  │ • Automatikus törlés  │                  │   takarítja el automatikusan  │
+  └───────────────────────┘                  └───────────────────────────────┘
+</code></pre></div>
+
+<ol>
+<li><strong>Stack (Verem):</strong>  </li>
+<li>Kisméretű, de elképesztően gyors memóriaterület.</li>
+<li>LIFO (Last In, First Out) elven működik: amikor belépsz egy metódusba, a helyi változók felkerülnek a verem tetejére; amikor a metódus véget ér, a verem azonnal és automatikusan leugrik róluk. Nincs szükség takarítóra, a felszabadítás azonnali.</li>
+<li><strong>Heap (Kupac):</strong>  </li>
+<li>Óriási, dinamikusan növekvő memóriaterület.</li>
+<li>Ide kerülnek a komplex, hosszabb életű objektumok, tömbök és szövegek.</li>
+<li>A Heap takarítását a háttérben futó <strong>Szemétgyűjtő (Garbage Collector - GC)</strong> végzi periodikusan, felkutatva a gazdátlanná vált objektumokat.</li>
+</ol>
+<hr />
+<h2 id="23-ertektipusok-value-types-vs-referenciatipusok-reference-types">2.3 Értéktípusok (Value Types) vs. Referenciatípusok (Reference Types)</h2>
+<p>Ez a kettősség a C# architektúrájának legfontosabb fundamentuma:</p>
+<h3 id="1-ertektipusok-value-types-struct">1. Értéktípusok (Value Types - <code>struct</code>)</h3>
+<ul>
+<li><strong>Ide tartoznak:</strong> <code>int</code>, <code>long</code>, <code>short</code>, <code>byte</code>, <code>float</code>, <code>double</code>, <code>decimal</code>, <code>bool</code>, <code>char</code>, <code>enum</code>, és a saját <code>struct</code>-ok.</li>
+<li><strong>Hogyan tárolódnak?</strong> Közvetlenül magát a <strong>nyers bináris értéket hordozzák</strong> a Stack memóriában.</li>
+<li><strong>Másoláskor:</strong> Érték szerinti másolás (Copy by Value) történik. Ha átadod egy másik változónak, egy teljesen független fizikai másolat jön létre!</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="p">;</span><span class="w">  </span><span class="c1">// A 10-es szám LEMÁSOLÓDIK egy új memóriarekeszbe!</span>
+<span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">20</span><span class="p">;</span>
+
+<span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">a</span><span class="p">);</span><span class="w"> </span><span class="c1">// 10 (Az eredeti &#39;a&#39; teljesen sértetlen maradt!)</span>
+<span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">b</span><span class="p">);</span><span class="w"> </span><span class="c1">// 20</span>
+</code></pre></div>
+
+<h3 id="2-referenciatipusok-reference-types-class">2. Referenciatípusok (Reference Types - <code>class</code>)</h3>
+<ul>
+<li><strong>Ide tartoznak:</strong> <code>string</code>, tömbök (<code>int[]</code>), listák (<code>List&lt;T&gt;</code>), osztályok (<code>class</code>), interfészek, <code>object</code>.</li>
+<li><strong>Hogyan tárolódnak?</strong> Két részből állnak:</li>
+<li>Maga a tényleges adat a <strong>Heap (Kupac)</strong> memóriában jön létre.</li>
+<li>A Stacken csupán egy apró <strong>memóriacímke (mutató / referencia)</strong> él, amely a Heap-re mutat!</li>
+<li><strong>Másoláskor:</strong> Referencia szerinti másolás (Copy by Reference) történik. Csak a mutató másolódik le, az adat közös marad!</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="kt">int</span><span class="p">[]</span><span class="w"> </span><span class="n">szamokA</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="kt">int</span><span class="p">[]</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="p">};</span>
+<span class="kt">int</span><span class="p">[]</span><span class="w"> </span><span class="n">szamokB</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">szamokA</span><span class="p">;</span><span class="w"> </span><span class="c1">// Csak a mutató másolódik! Mindkettő ugyanarra a tömbre néz a Heap-en!</span>
+
+<span class="n">szamokB</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">99</span><span class="p">;</span>
+
+<span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">szamokA</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span><span class="w"> </span><span class="c1">// 99 -&gt; Az eredeti &#39;szamokA&#39; is megváltozott!</span>
+</code></pre></div>
+
+<hr />
+<h2 id="24-elemi-adattipusok-osszefoglalo-tablazata">2.4 Elemi adattípusok összefoglaló táblázata</h2>
+<table>
+<thead>
+<tr>
+<th>Típus kulcsszó</th>
+<th>.NET típus</th>
+<th>Méret</th>
+<th>Értéktartomány / Jellemző</th>
+<th>Példa literál</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong><code>int</code></strong></td>
+<td><code>System.Int32</code></td>
+<td>4 bájt</td>
+<td>-2.14 milliárd és +2.14 milliárd között</td>
+<td><code>42</code>, <code>-105</code></td>
+</tr>
+<tr>
+<td><strong><code>long</code></strong></td>
+<td><code>System.Int64</code></td>
+<td>8 bájt</td>
+<td>-9 trillió és +9 trillió között (64 bit)</td>
+<td><code>9_000_000_000L</code></td>
+</tr>
+<tr>
+<td><strong><code>double</code></strong></td>
+<td><code>System.Double</code></td>
+<td>8 bájt</td>
+<td>~15-17 tizedesjegy pontosság (IEEE 754)</td>
+<td><code>3.14159</code></td>
+</tr>
+<tr>
+<td><strong><code>decimal</code></strong></td>
+<td><code>System.Decimal</code></td>
+<td>16 bájt</td>
+<td>28-29 tizedesjegy <strong>100% pénzügyi pontosság</strong></td>
+<td><code>199.99M</code> (kötelező 'M' utótag!)</td>
+</tr>
+<tr>
+<td><strong><code>bool</code></strong></td>
+<td><code>System.Boolean</code></td>
+<td>1 bájt</td>
+<td><code>true</code> vagy <code>false</code></td>
+<td><code>true</code>, <code>false</code></td>
+</tr>
+<tr>
+<td><strong><code>char</code></strong></td>
+<td><code>System.Char</code></td>
+<td>2 bájt</td>
+<td>Egyetlen Unicode karakter szimpla idézőjellel</td>
+<td><code>'A'</code>, <code>'€'</code>, <code>'\n'</code></td>
+</tr>
+<tr>
+<td><strong><code>string</code></strong></td>
+<td><code>System.String</code></td>
+<td>Változó</td>
+<td>Karakterlánc a Heap-en, immutábilis</td>
+<td><code>"Helló C#!"</code></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>[!WARNING] A lebegőpontos számok csapdája és a kötelező <code>decimal</code>
+Ahogyan azt már megtanultuk, a számítógépek a <code>float</code> és <code>double</code> típusokat kettes számrendszerben tárolják.
+Próbáld ki C#-ban:
+<code>csharp
+double d1 = 0.1;
+double d2 = 0.2;
+Console.WriteLine(d1 + d2 == 0.3); // FALSE! (Mert az eredmény 0.30000000000000004)</code>
+Ezért a C# világában létezik egy kőbe vésett törvény: <strong>Pénzügyi számításokhoz, számlázáshoz, árfolyamokhoz és bankszámlákhoz KIZÁRÓLAG a <code>decimal</code> típust szabad használni!</strong> A literál végére kötelező kitenni az <code>M</code> vagy <code>m</code> betűt:
+<code>csharp
+decimal ar1 = 0.1m;
+decimal ar2 = 0.2m;
+Console.WriteLine(ar1 + ar2 == 0.3m); // TRUE! (Garantált 100%-os pontosság!)</code></p>
+</blockquote>
+<hr />
+<h2 id="25-szovegek-string-immutabilitas-es-string-interpolacio">2.5 Szövegek (<code>string</code>): Immutabilitás és String Interpoláció</h2>
+<p>A C#-ban a szövegek (<code>string</code>) referenciatípusok, de különleges tulajdonsággal bírnak: <strong>megváltoztathatatlanok (Immutable)</strong>. Ha egy stringen műveletet hajtasz végre (pl. hozzáfűzöl egy szót), a C# a háttérben <strong>mindig egy vadonatúj string objektumot hoz létre a Heap-en</strong>, a régit pedig otthagyja a szemétgyűjtőnek.</p>
+<h3 id="modern-string-interpolacio">Modern String Interpoláció (<code>$""</code>)</h3>
+<p>Felejtsd el a régi <code>String.Format()</code>-ot vagy a pluszjeles összefűzögetést! A modern C# a dollárjeles interpolációt (<code>$""</code>) használja, amelyben kapcsos zárójelekbe (<code>{}</code>) közvetlenül beágyazhatunk változókat és formázási specifikációkat:</p>
+<div class="highlight"><pre><span></span><code><span class="kt">string</span><span class="w"> </span><span class="n">termek</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Gamer Egér&quot;</span><span class="p">;</span>
+<span class="kt">decimal</span><span class="w"> </span><span class="n">ar</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">14990.50m</span><span class="p">;</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">darab</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
+
+<span class="c1">// Beágyazás és formázás:</span>
+<span class="c1">// :C -&gt; Valuta formátum helyi pénznemben</span>
+<span class="c1">// :N2 -&gt; Ezres tagolás 2 tizedesjeggyel</span>
+<span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$&quot;Termék: {termek} | Mennyiség: {darab} db&quot;</span><span class="p">);</span>
+<span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$&quot;Egységár: {ar:N2} Ft | Végösszeg: {ar * darab:N2} Ft&quot;</span><span class="p">);</span>
+</code></pre></div>
+
+<h3 id="tobbsoros-es-nyers-szovegek-c-11-raw-string-literals">Többsoros és Nyers Szövegek (C# 11 Raw String Literals)</h3>
+<p>Ha JSON-t, SQL parancsot vagy HTML-t kell a C# kódba ágyaznod, a C# 11 bevezette a három idézőjeles nyers szövegeket (<code>"""..."""</code>), amelyekben nincs szükség felesleges visszaperjeles escape-elésre (<code>\"</code>):</p>
+<div class="highlight"><pre><span></span><code><span class="kt">string</span><span class="w"> </span><span class="n">sqlParancs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="n">SELECT</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">felhasznalonev</span><span class="p">,</span><span class="w"> </span><span class="n">egyenleg</span>
+<span class="w">    </span><span class="n">FROM</span><span class="w"> </span><span class="n">ugyfelek</span>
+<span class="w">    </span><span class="n">WHERE</span><span class="w"> </span><span class="n">aktiv</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="n">AND</span><span class="w"> </span><span class="n">egyenleg</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">50000</span>
+<span class="w">    </span><span class="n">ORDER</span><span class="w"> </span><span class="n">BY</span><span class="w"> </span><span class="n">egyenleg</span><span class="w"> </span><span class="n">DESC</span><span class="p">;</span>
+<span class="w">    </span><span class="s">&quot;&quot;&quot;;</span>
+</code></pre></div>
+
+<hr />
+<h2 id="26-a-milliard-dollaros-hiba-kivedese-nullable-reference-types-t">2.6 A „Milliárd Dolláros Hiba” kivédése: Nullable Reference Types (<code>T?</code>)</h2>
+<p>Sir Tony Hoare, a <code>null</code> referencia megalkotója 2009-ben nyilvánosan bocsánatot kért a világ programozóitól, „milliárd dolláros hibának” nevezve a null pointer kitalálását. A szoftverfejlesztés történetének legtöbb váratlan szerverleállását és kék halálát az okozta, hogy a kód megpróbált hozzáférni egy olyan objektumhoz, ami valójában nem létezett (<code>NullReferenceException</code>).</p>
+<p>A C# 8.0 egy forradalmi védelmi vonalat vezetett be: a <strong>Nullable Reference Types (NRT)</strong> rendszert, amely a .NET 8 / 10 / 11 alapértelmezett szabványa!</p>
+<h3 id="hogyan-mukodik-a-null-biztonsag">Hogyan működik a Null-biztonság?</h3>
+<p>A C#-ban egy típus alapértelmezésben <strong>NEM LEHET NULL</strong>!
+Ha egy változó megengedheti a hiányzó értéket (<code>null</code>), ezt kérdőjellel (<code>?</code>) kifejezetten jeleznünk kell a fordítónak:</p>
+<div class="highlight"><pre><span></span><code><span class="kt">string</span><span class="w"> </span><span class="n">biztosNev</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Kovács Béla&quot;</span><span class="p">;</span><span class="w"> </span><span class="c1">// Ez a változó SOSEM lehet null!</span>
+<span class="c1">// biztosNev = null;  &lt;-- A fordító azonnal sárga figyelmeztetést dob!</span>
+
+<span class="kt">string?</span><span class="w"> </span><span class="n">opcionálisCím</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">null</span><span class="p">;</span><span class="w">     </span><span class="c1">// A &#39;?&#39; jelzi: ez az érték HIÁNYOZHAT is!</span>
+</code></pre></div>
+
+<h3 id="biztonsagos-hozzaferes-operatorok">Biztonságos hozzáférés operátorok:</h3>
+<ol>
+<li><strong>Null-Conditional Operátor (<code>?.</code>):</strong> Csak akkor hívja meg a metódust, ha az objektum nem null:
+   <code>csharp
+   int? hossz = opcionálisCím?.Length; // Ha opcionálisCím null, a hossz is null lesz hiba nélkül!</code></li>
+<li><strong>Null-Coalescing Operátor (<code>??</code>):</strong> Tartalék alapértelmezett értéket ad, ha a bal oldal null:
+   <code>csharp
+   string megjelenítendőCím = opcionálisCím ?? "Nincs lakcím megadva";</code></li>
+<li><strong>Null-Coalescing Értékadás (<code>??=</code>):</strong> Csak akkor ad értéket a változónak, ha az jelenleg null:
+   <code>csharp
+   opcionálisCím ??= "Budapest, Alapértelmezett utca 1.";</code></li>
+</ol>
+<hr />
+<h2 id="27-reszletes-gyakorlati-esettanulmany-valutakonverzios-es-szamlazo-penzugyi-motor">2.7 Részletes Gyakorlati Esettanulmány: Valutakonverziós és Számlázó Pénzügyi Motor</h2>
+<p>Építsünk fel egy professzionális, ipari szintű számlázó modult, amely bemutatja:
+1. A <code>decimal</code> típus 100%-os pénzügyi pontosságát;
+2. A Nullable Reference Types (<code>string?</code>) és null-biztonsági operátorok (<code>??</code>) használatát;
+3. A Stack és Heap memóriamegosztás tudatos alkalmazását;
+4. A precíz formázást és kerekítést.</p>
+<h3 id="a-szamlazo-motor-c-forraskodja">A számlázó motor C# forráskódja</h3>
+<div class="highlight"><pre><span></span><code><span class="c1">// Top-Level Statements és tiszta típusbiztonság a modern .NET-ben</span>
+<span class="k">using</span><span class="w"> </span><span class="nn">System</span><span class="p">;</span>
+
+<span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">&quot;=====================================================&quot;</span><span class="p">);</span>
+<span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">&quot;    PRSTART PÉNZÜGYI SZÁMLÁZÓ ÉS VALUTAMOTOR (C#)&quot;</span><span class="p">);</span>
+<span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">&quot;=====================================================\n&quot;</span><span class="p">);</span>
+
+<span class="c1">// 1. Állandó üzleti konstansok (PascalCase)</span>
+<span class="k">const</span><span class="w"> </span><span class="kt">decimal</span><span class="w"> </span><span class="n">AfaKulcs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.27m</span><span class="p">;</span><span class="w">                   </span><span class="c1">// 27% magyar ÁFA</span>
+<span class="k">const</span><span class="w"> </span><span class="kt">decimal</span><span class="w"> </span><span class="n">EurHufArfolyam</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">398.75m</span><span class="p">;</span><span class="w">           </span><span class="c1">// 1 EUR = 398.75 HUF</span>
+<span class="k">const</span><span class="w"> </span><span class="kt">decimal</span><span class="w"> </span><span class="n">IngyenesSzallitasHatar</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">25000.00m</span><span class="p">;</span><span class="w"> </span><span class="c1">// 25 000 Ft felett nincs szállítás</span>
+<span class="k">const</span><span class="w"> </span><span class="kt">decimal</span><span class="w"> </span><span class="n">AlapertelmezettSzallitas</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1990.00m</span><span class="p">;</span>
+
+<span class="c1">// 2. Számlázási folyamat végrehajtása metódussal</span>
+<span class="k">void</span><span class="w"> </span><span class="nf">KiallitSzamlat</span><span class="p">(</span>
+<span class="w">    </span><span class="kt">string</span><span class="w"> </span><span class="n">ugyfelNev</span><span class="p">,</span>
+<span class="w">    </span><span class="kt">string?</span><span class="w"> </span><span class="n">kuponKod</span><span class="p">,</span>
+<span class="w">    </span><span class="kt">decimal</span><span class="w"> </span><span class="n">nettoEgysegar</span><span class="p">,</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">darabszam</span><span class="p">,</span>
+<span class="w">    </span><span class="kt">string</span><span class="w"> </span><span class="n">penznem</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;HUF&quot;</span>
+<span class="p">)</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$&quot;Vevő neve: {ugyfelNev}&quot;</span><span class="p">);</span>
+
+<span class="w">    </span><span class="c1">// Null-coalescing operátor a kupon kezelésére:</span>
+<span class="w">    </span><span class="kt">string</span><span class="w"> </span><span class="n">kuponInfo</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">kuponKod</span><span class="w"> </span><span class="o">??</span><span class="w"> </span><span class="s">&quot;[Nincs kupon érvényesítve]&quot;</span><span class="p">;</span>
+<span class="w">    </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$&quot;Alkalmazott kupon: {kuponInfo}&quot;</span><span class="p">);</span>
+
+<span class="w">    </span><span class="c1">// Részösszeg számítása precíz decimal aritmetikával (Stacken fut!):</span>
+<span class="w">    </span><span class="kt">decimal</span><span class="w"> </span><span class="n">alapar</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">nettoEgysegar</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">darabszam</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">decimal</span><span class="w"> </span><span class="n">kedvezmenySzazalek</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0m</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">kuponKod</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">&quot;SPRING20&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">kedvezmenySzazalek</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.20m</span><span class="p">;</span><span class="w"> </span><span class="c1">// 20% kedvezmény</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">else</span><span class="w"> </span><span class="nf">if</span><span class="w"> </span><span class="p">(</span><span class="n">kuponKod</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">&quot;VIP10&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">kedvezmenySzazalek</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.10m</span><span class="p">;</span><span class="w"> </span><span class="c1">// 10% kedvezmény</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kt">decimal</span><span class="w"> </span><span class="n">kedvezmenyOsszeg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">alapar</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">kedvezmenySzazalek</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">decimal</span><span class="w"> </span><span class="n">kedvezmenyesNetto</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">alapar</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">kedvezmenyOsszeg</span><span class="p">;</span>
+
+<span class="w">    </span><span class="c1">// Szállítási költség logikája</span>
+<span class="w">    </span><span class="kt">decimal</span><span class="w"> </span><span class="n">szallitasiDij</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">kedvezmenyesNetto</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="n">IngyenesSzallitasHatar</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">kedvezmenyesNetto</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span>
+<span class="w">        </span><span class="o">?</span><span class="w"> </span><span class="mf">0.0m</span>
+<span class="w">        </span><span class="p">:</span><span class="w"> </span><span class="n">AlapertelmezettSzallitas</span><span class="p">;</span>
+
+<span class="w">    </span><span class="c1">// ÁFA és Bruttó végösszeg kalkulációja</span>
+<span class="w">    </span><span class="kt">decimal</span><span class="w"> </span><span class="n">afaOsszeg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">kedvezmenyesNetto</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">AfaKulcs</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">decimal</span><span class="w"> </span><span class="n">bruttoVegosszeg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">kedvezmenyesNetto</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">afaOsszeg</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">szallitasiDij</span><span class="p">;</span>
+
+<span class="w">    </span><span class="c1">// Pénznem átszámítás, ha EUR-t kértek</span>
+<span class="w">    </span><span class="kt">decimal</span><span class="w"> </span><span class="n">vegsoFizetendo</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">bruttoVegosszeg</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">string</span><span class="w"> </span><span class="n">kiirtPenznem</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">penznem</span><span class="p">.</span><span class="n">ToUpper</span><span class="p">();</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">kiirtPenznem</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">&quot;EUR&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">vegsoFizetendo</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Math</span><span class="p">.</span><span class="n">Round</span><span class="p">(</span><span class="n">bruttoVegosszeg</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">EurHufArfolyam</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1">// Professzionális bizonylat kiírása String Interpolációval:</span>
+<span class="w">    </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">&quot;-----------------------------------------------------&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$&quot;Termék nettó egységár:   {nettoEgysegar,15:N2} Ft&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$&quot;Rendelt darabszám:        {darabszam,15} db&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$&quot;Eredeti részösszeg:       {alapar,15:N2} Ft&quot;</span><span class="p">);</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">kedvezmenySzazalek</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$&quot;Kupon kedvezmény:        -{kedvezmenyOsszeg,15:N2} Ft ({kedvezmenySzazalek * 100:N0}%)&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$&quot;Kedvezményes nettó:      {kedvezmenyesNetto,15:N2} Ft&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$&quot;27% ÁFA tartalom:         {afaOsszeg,15:N2} Ft&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$&quot;Szállítási díj:           {(szallitasiDij == 0 ? &quot;</span><span class="n">INGYENES</span><span class="s">&quot; : $&quot;</span><span class="p">{</span><span class="n">szallitasiDij</span><span class="p">:</span><span class="n">N2</span><span class="p">}</span><span class="w"> </span><span class="n">Ft</span><span class="s">&quot;),15}&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">&quot;=====================================================&quot;</span><span class="p">);</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">kiirtPenznem</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">&quot;EUR&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$&quot;FIZETENDŐ EURÓBAN:        {vegsoFizetendo,15:N2} EUR&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$&quot;  (HUF egyenérték:        {bruttoVegosszeg,15:N2} Ft)&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">else</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$&quot;FIZETENDŐ BRUTTÓ:         {bruttoVegosszeg,15:N2} Ft&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">&quot;=====================================================\n&quot;</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="c1">// 3. Rendszertesztek futtatása</span>
+<span class="n">KiallitSzamlat</span><span class="p">(</span>
+<span class="w">    </span><span class="n">ugyfelNev</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Kovács Béla&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="n">kuponKod</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;SPRING20&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="n">nettoEgysegar</span><span class="p">:</span><span class="w"> </span><span class="mf">12500.00m</span><span class="p">,</span>
+<span class="w">    </span><span class="n">darabszam</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span>
+<span class="w">    </span><span class="n">penznem</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;HUF&quot;</span>
+<span class="p">);</span>
+
+<span class="n">KiallitSzamlat</span><span class="p">(</span>
+<span class="w">    </span><span class="n">ugyfelNev</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;International Partner Ltd.&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="n">kuponKod</span><span class="p">:</span><span class="w"> </span><span class="k">null</span><span class="p">,</span><span class="w"> </span><span class="c1">// Szándékosan hiányzó érték (NRT tesztelése!)</span>
+<span class="w">    </span><span class="n">nettoEgysegar</span><span class="p">:</span><span class="w"> </span><span class="mf">8500.00m</span><span class="p">,</span>
+<span class="w">    </span><span class="n">darabszam</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span>
+<span class="w">    </span><span class="n">penznem</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;EUR&quot;</span>
+<span class="p">);</span>
+</code></pre></div>
+
+<hr />
+<h2 id="28-fejezetzaro-osszefoglalo-es-gyakorlatok">2.8 Fejezetzáró összefoglaló és gyakorlatok</h2>
+<table>
+<thead>
+<tr>
+<th>Téma</th>
+<th>Szintaxis / Eszköz</th>
+<th>Fő szabály</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Deklaráció</strong></td>
+<td><code>int x = 10;</code></td>
+<td>Statikus típusosság, fordítási idejű ellenőrzés.</td>
+</tr>
+<tr>
+<td><strong>Típusinferencia</strong></td>
+<td><code>var szoveg = "Helló";</code></td>
+<td>Statikus típusmeghatározás a jobb oldal alapján.</td>
+</tr>
+<tr>
+<td><strong>Stack vs. Heap</strong></td>
+<td>Stack (nyers érték), Heap (objektum)</td>
+<td>Értéktípusok másolódnak, referenciák mutatnak.</td>
+</tr>
+<tr>
+<td><strong>Pénzügyi típus</strong></td>
+<td><code>decimal m = 19.99m;</code></td>
+<td>100% pontosság, lebegőpontos kerekítési hibák nélkül.</td>
+</tr>
+<tr>
+<td><strong>String Interpoláció</strong></td>
+<td><code>$"Összeg: {ar:N2} Ft"</code></td>
+<td>Kifejezések és formátumok beágyazása szövegbe.</td>
+</tr>
+<tr>
+<td><strong>Null-biztonság</strong></td>
+<td><code>string? nev = null;</code></td>
+<td>Kérdőjellel engedélyezzük a null értéket.</td>
+</tr>
+<tr>
+<td><strong>Null operátorok</strong></td>
+<td><code>x?.Length</code>, <code>x ?? "alapérték"</code></td>
+<td>Kivédik a <code>NullReferenceException</code> összeomlást.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="gyakorlati-feladatok">Gyakorlati feladatok</h3>
+<ol>
+<li><strong>Stack vs. Heap memóriakísérlet konzolon:</strong><br />
+   Hozz létre egy sima egész változót (<code>int a = 5; int b = a;</code>), majd változtasd meg <code>b</code>-t! Ezután hozz létre egy egészekből álló tömböt (<code>int[] t1 = {1, 2}; int[] t2 = t1;</code>), és változtasd meg a <code>t2[0]</code> elemet! Írasd ki a változók értékeit, és figyeld meg a másolás mechanizmusát!</li>
+<li><strong>Kamatkalkulátor <code>decimal</code> típussal:</strong><br />
+   Írj egy C# programot, amely bekéri a kezdőtőkét, az éves kamatlábat (pl. 8.5%) és az évek számát. Számítsd ki a kamatos kamattal növelt lejárati összeget a <code>decimal</code> modul precizitásával, és jelenítsd meg ezres tagolással!</li>
+<li><strong>Null-biztos Felhasználói Profil Kezelő:</strong><br />
+   Hozz létre egy konzolos alkalmazást, amely kezeli egy felhasználó kötelező nevét (<code>string</code>), opcionális becenevét (<code>string?</code>) és opcionális telefonszámát (<code>string?</code>). Használj null-coalescing (<code>??</code>) operátort a hiányzó adatok helyén a <code>"Nincs megadva"</code> szöveg elegáns megjelenítésére!</li>
+</ol>
+<hr />
+<h3 id="utravalo-kis-szojegyzek-a-fejezethez_1">📖 Útravaló kis szójegyzék a fejezethez</h3>
+<ul>
+<li><strong>Stack (Verem):</strong> Kis méretű, villámgyors memóriaterület a közvetlen értéktípusok és hivatkozási mutatók tárolására.</li>
+<li><strong>Heap (Kupac):</strong> Óriási, dinamikus memóriaterület az összetett objektumok és szövegek számára, amelyet a Garbage Collector takarít.</li>
+<li><strong>Értéktípus (Value Type):</strong> Olyan típus, amely közvetlenül magát az értéket hordozza a Stacken (<code>int</code>, <code>double</code>, <code>decimal</code>, <code>struct</code>).</li>
+<li><strong>Referenciatípus (Reference Type):</strong> Olyan típus, amelynek tényleges adatai a Heapen élnek, és csupán egy mutató hivatkozik rá (<code>string</code>, <code>class</code>, tömbök).</li>
+<li><strong>NRT (Nullable Reference Types):</strong> A modern C# fordítóvédelme a váratlan <code>null</code> értékek és összeomlások ellen.</li>
+</ul>
 <hr />
 <h4 id="mini-code-review-ellenorzolista">Mini Code Review Ellenőrzőlista</h4>
+<p>Mielőtt továbblépnél a 3. fejezetre, ellenőrizd le a kódodat:</p>
 <table>
 <thead>
 <tr>
@@ -789,33 +1205,28 @@ git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </sp
 </thead>
 <tbody>
 <tr>
-<td><strong>1. Olvashatóság</strong></td>
-<td>Betartottad a C# konvenciókat (PascalCase metódusok, camelCase lokális változók)?</td>
+<td><strong>1. Típushelyesség</strong></td>
+<td>Pénzügyi számításokhoz és árakhoz kizárólag a <code>decimal</code> (<code>m</code>) típust használtad?</td>
 <td>[ ]</td>
 </tr>
 <tr>
-<td><strong>2. Típusok</strong></td>
-<td>Megfelelő típusokat használtál (<code>string</code>, <code>int</code>) a felesleges konverziók elkerülésére?</td>
+<td><strong>2. Null-biztonság</strong></td>
+<td>Ahol egy érték hiányozhat, kitetted a <code>?</code> jelet (<code>string?</code>), és kezeled a <code>??</code> operátorral?</td>
 <td>[ ]</td>
 </tr>
 <tr>
-<td><strong>3. Hibakezelés</strong></td>
-<td>Kezelted a null bemenetet a <code>??</code> operátorral?</td>
+<td><strong>3. Névkonvenciók</strong></td>
+<td>Változóknál a <code>camelCase</code>, konstansoknál és metódusoknál a <code>PascalCase</code> formát követed?</td>
 <td>[ ]</td>
 </tr>
 <tr>
-<td><strong>4. Tesztelhetőség</strong></td>
-<td>A kód lefut hiba nélkül a <code>dotnet run</code> paranccsal?</td>
+<td><strong>4. String formázás</strong></td>
+<td>Régi összefűzögetés helyett a modern <code>$""</code> interpolációt alkalmaztad?</td>
 <td>[ ]</td>
 </tr>
 <tr>
-<td><strong>5. Biztonság</strong></td>
-<td>Létrehoztad a <code>.gitignore</code> fájlt, hogy a <code>bin/</code> és <code>obj/</code> mappák ne kerüljenek gitbe?</td>
-<td>[ ]</td>
-</tr>
-<tr>
-<td><strong>6. Teljesítmény</strong></td>
-<td>Kerülted a felesleges memóriafoglalásokat?</td>
+<td><strong>5. Var tudatosság</strong></td>
+<td>Tisztában vagy azzal, hogy a <code>var</code> statikus típust hoz létre a fordítás pillanatában?</td>
 <td>[ ]</td>
 </tr>
 </tbody>

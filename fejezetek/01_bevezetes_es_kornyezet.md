@@ -198,15 +198,3 @@ git commit -m "init: elso C# projektem letrehozasa"
 * **Top-Level Statements:** Modern C# nyelvi funkció, amellyel a felesleges `class Program` és `static void Main` burkoló kód elhagyható.
 * **String Interpoláció (`$""`):** Szövegformázási technika, amellyel változókat közvetlenül a szövegbe ágyazhatunk: `$"Helló {nev}!"`.
 
----
-
-#### Mini Code Review Ellenőrzőlista
-
-| Szempont | Kérdés magadhoz | Ellenőrzés |
-|---|---|---|
-| **1. Olvashatóság** | Betartottad a C# konvenciókat (PascalCase metódusok, camelCase lokális változók)? | [ ] |
-| **2. Típusok** | Megfelelő típusokat használtál (`string`, `int`) a felesleges konverziók elkerülésére? | [ ] |
-| **3. Hibakezelés** | Kezelted a null bemenetet a `??` operátorral? | [ ] |
-| **4. Tesztelhetőség** | A kód lefut hiba nélkül a `dotnet run` paranccsal? | [ ] |
-| **5. Biztonság** | Létrehoztad a `.gitignore` fájlt, hogy a `bin/` és `obj/` mappák ne kerüljenek gitbe? | [ ] |
-| **6. Teljesítmény** | Kerülted a felesleges memóriafoglalásokat? | [ ] |
