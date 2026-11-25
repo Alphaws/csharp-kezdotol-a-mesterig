@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <title>Python: Kezdőtől a Mesterfokig</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 20mm 18mm 22mm 18mm;
+            @bottom-center {
+                content: counter(page);
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                font-size: 9pt;
+                color: #666;
+            }
+        }
+
+        @page:first {
+            margin: 0;
+            @bottom-center { content: normal; }
+        }
+
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Roboto', Helvetica, Arial, sans-serif;
+            font-size: 11pt;
+            line-height: 1.65;
+            color: #1e293b;
+            background-color: #ffffff;
+            margin: 0;
+            padding: 0;
+        }
+
+        .cover-page {
+            width: 100vw;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+            page-break-after: always;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #0c1527;
+        }
+
+        .cover-img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .page-break {
+            page-break-after: always;
+            break-after: page;
+        }
+
+        .toc-page {
+            break-before: page;
+            break-after: page;
+        }
+
+        .toc-page .toc {
+            font-size: 10.5pt;
+            line-height: 1.35;
+        }
+
+        .toc-page .toc ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .toc-page .toc ul ul {
+            padding-left: 22px;
+        }
+
+        .toc-page .toc li {
+            margin-bottom: 5px;
+            break-inside: avoid;
+        }
+
+        .toc-page .toc a {
+            display: flex;
+            width: 100%;
+            color: #1e293b;
+            text-decoration: none;
+        }
+
+        .toc-page .toc .toc-label {
+            flex: 0 1 auto;
+        }
+
+        .toc-page .toc .toc-leader {
+            flex: 1 1 auto;
+            min-width: 12px;
+            margin: 0 7px;
+            border-bottom: 1px dotted #94a3b8;
+            height: 1em;
+        }
+
+        .toc-page .toc .toc-page-number {
+            flex: 0 0 28px;
+            text-align: right;
+            color: #475569;
+        }
+
+        h1, h2, h3, h4 {
+            color: #0f172a;
+            font-weight: 700;
+            line-height: 1.3;
+        }
+
+        h1 {
+            font-size: 24pt;
+            border-bottom: 2px solid #3b82f6;
+            padding-bottom: 8px;
+            margin-top: 0;
+            margin-bottom: 24px;
+            break-before: avoid;
+        }
+
+        .chapter-break {
+            break-before: page;
+            height: 0;
+        }
+
+        h2 {
+            font-size: 16pt;
+            margin-top: 28px;
+            margin-bottom: 14px;
+            border-left: 4px solid #3b82f6;
+            padding-left: 10px;
+        }
+
+        h3 {
+            font-size: 13pt;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            color: #1e3a8a;
+        }
+
+        p {
+            margin-bottom: 14px;
+            text-align: justify;
+        }
+
+        blockquote {
+            margin: 18px 0;
+            padding: 12px 18px;
+            background-color: #f1f5f9;
+            border-left: 4px solid #f59e0b;
+            font-style: italic;
+            color: #334155;
+            border-radius: 0 6px 6px 0;
+        }
+
+        code {
+            font-family: 'DejaVu Sans Mono', 'Liberation Mono', 'Ubuntu Mono', 'Courier New', monospace;
+            background-color: #f1f5f9;
+            color: #0f172a;
+            padding: 2px 5px;
+            border-radius: 4px;
+            font-size: 9.5pt;
+        }
+
+        pre {
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 12px 14px;
+            overflow-x: hidden;
+            white-space: pre-wrap;
+            word-break: break-word;
+            margin: 18px 0;
+            font-size: 9pt;
+            line-height: 1.45;
+        }
+
+        pre code {
+            background-color: transparent;
+            padding: 0;
+            border-radius: 0;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 10.5pt;
+        }
+
+        th, td {
+            border: 1px solid #cbd5e1;
+            padding: 6px 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f8fafc;
+            font-weight: 600;
+        }
+
+        ul, ol {
+            margin-top: 6px;
+            margin-bottom: 16px;
+            padding-left: 24px;
+        }
+
+        li {
+            margin-bottom: 6px;
+        }
+
+        hr {
+            border: 0;
+            border-top: 1px solid #e2e8f0;
+            margin: 28px 0;
+        }
+
+        /* Pygments Syntax Styling */
+        pre { line-height: 125%; }
+td.linenos .normal { color: #666666; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: #666666; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.highlight .hll { background-color: #ffffcc }
+.highlight { background: #f0f0f0; }
+.highlight .c { color: #60A0B0; font-style: italic } /* Comment */
+.highlight .err { border: 1px solid #F00 } /* Error */
+.highlight .k { color: #007020; font-weight: bold } /* Keyword */
+.highlight .o { color: #666 } /* Operator */
+.highlight .ch { color: #60A0B0; font-style: italic } /* Comment.Hashbang */
+.highlight .cm { color: #60A0B0; font-style: italic } /* Comment.Multiline */
+.highlight .cp { color: #007020 } /* Comment.Preproc */
+.highlight .cpf { color: #60A0B0; font-style: italic } /* Comment.PreprocFile */
+.highlight .c1 { color: #60A0B0; font-style: italic } /* Comment.Single */
+.highlight .cs { color: #60A0B0; background-color: #FFF0F0 } /* Comment.Special */
+.highlight .gd { color: #A00000 } /* Generic.Deleted */
+.highlight .ge { font-style: italic } /* Generic.Emph */
+.highlight .ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.highlight .gr { color: #F00 } /* Generic.Error */
+.highlight .gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.highlight .gi { color: #00A000 } /* Generic.Inserted */
+.highlight .go { color: #888 } /* Generic.Output */
+.highlight .gp { color: #C65D09; font-weight: bold } /* Generic.Prompt */
+.highlight .gs { font-weight: bold } /* Generic.Strong */
+.highlight .gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.highlight .gt { color: #04D } /* Generic.Traceback */
+.highlight .kc { color: #007020; font-weight: bold } /* Keyword.Constant */
+.highlight .kd { color: #007020; font-weight: bold } /* Keyword.Declaration */
+.highlight .kn { color: #007020; font-weight: bold } /* Keyword.Namespace */
+.highlight .kp { color: #007020 } /* Keyword.Pseudo */
+.highlight .kr { color: #007020; font-weight: bold } /* Keyword.Reserved */
+.highlight .kt { color: #902000 } /* Keyword.Type */
+.highlight .m { color: #40A070 } /* Literal.Number */
+.highlight .s { color: #4070A0 } /* Literal.String */
+.highlight .na { color: #4070A0 } /* Name.Attribute */
+.highlight .nb { color: #007020 } /* Name.Builtin */
+.highlight .nc { color: #0E84B5; font-weight: bold } /* Name.Class */
+.highlight .no { color: #60ADD5 } /* Name.Constant */
+.highlight .nd { color: #555; font-weight: bold } /* Name.Decorator */
+.highlight .ni { color: #D55537; font-weight: bold } /* Name.Entity */
+.highlight .ne { color: #007020 } /* Name.Exception */
+.highlight .nf { color: #06287E } /* Name.Function */
+.highlight .nl { color: #002070; font-weight: bold } /* Name.Label */
+.highlight .nn { color: #0E84B5; font-weight: bold } /* Name.Namespace */
+.highlight .nt { color: #062873; font-weight: bold } /* Name.Tag */
+.highlight .nv { color: #BB60D5 } /* Name.Variable */
+.highlight .ow { color: #007020; font-weight: bold } /* Operator.Word */
+.highlight .w { color: #BBB } /* Text.Whitespace */
+.highlight .mb { color: #40A070 } /* Literal.Number.Bin */
+.highlight .mf { color: #40A070 } /* Literal.Number.Float */
+.highlight .mh { color: #40A070 } /* Literal.Number.Hex */
+.highlight .mi { color: #40A070 } /* Literal.Number.Integer */
+.highlight .mo { color: #40A070 } /* Literal.Number.Oct */
+.highlight .sa { color: #4070A0 } /* Literal.String.Affix */
+.highlight .sb { color: #4070A0 } /* Literal.String.Backtick */
+.highlight .sc { color: #4070A0 } /* Literal.String.Char */
+.highlight .dl { color: #4070A0 } /* Literal.String.Delimiter */
+.highlight .sd { color: #4070A0; font-style: italic } /* Literal.String.Doc */
+.highlight .s2 { color: #4070A0 } /* Literal.String.Double */
+.highlight .se { color: #4070A0; font-weight: bold } /* Literal.String.Escape */
+.highlight .sh { color: #4070A0 } /* Literal.String.Heredoc */
+.highlight .si { color: #70A0D0; font-style: italic } /* Literal.String.Interpol */
+.highlight .sx { color: #C65D09 } /* Literal.String.Other */
+.highlight .sr { color: #235388 } /* Literal.String.Regex */
+.highlight .s1 { color: #4070A0 } /* Literal.String.Single */
+.highlight .ss { color: #517918 } /* Literal.String.Symbol */
+.highlight .bp { color: #007020 } /* Name.Builtin.Pseudo */
+.highlight .fm { color: #06287E } /* Name.Function.Magic */
+.highlight .vc { color: #BB60D5 } /* Name.Variable.Class */
+.highlight .vg { color: #BB60D5 } /* Name.Variable.Global */
+.highlight .vi { color: #BB60D5 } /* Name.Variable.Instance */
+.highlight .vm { color: #BB60D5 } /* Name.Variable.Magic */
+.highlight .il { color: #40A070 } /* Literal.Number.Integer.Long */
+    </style>
+</head>
+<body>
+    
+    
+
+    <section class="toc-page">
+        <h1>Tartalomjegyzék</h1>
+        <div class="toc">
+<ul>
+<li><a href="#a-szerzorol"><span class="toc-label">A Szerzőről</span><span class="toc-leader"></span><span class="toc-page-number">2</span></a></li>
+<li><a href="#eloszo"><span class="toc-label">Előszó</span><span class="toc-leader"></span><span class="toc-page-number">3</span></a></li>
+<li><a href="#bevezeto-hogyan-tanulj-es-c-tanulasi-terkep"><span class="toc-label">Bevezető: Hogyan tanulj és C# Tanulási Térkép</span><span class="toc-leader"></span><span class="toc-page-number">5</span></a><ul>
+<li><a href="#a-konyv-c-tanulasi-terkepe-learning-roadmap"><span class="toc-label">A Könyv C# Tanulási Térképe (Learning Roadmap)</span><span class="toc-leader"></span><span class="toc-page-number">5</span></a></li>
+<li><a href="#kinek-melyik-fejezetek-kihagyhatok-vagy-opcionalisak"><span class="toc-label">Kinek melyik fejezetek kihagyhatók vagy opcionálisak?</span><span class="toc-leader"></span><span class="toc-page-number">5</span></a></li>
+<li><a href="#a-hatekony-tanulas-3-aranyszabalya"><span class="toc-label">A Hatékony Tanulás 3 Aranyszabálya</span><span class="toc-leader"></span><span class="toc-page-number">6</span></a></li>
+</ul>
+</li>
+<li><a href="#1-bevezetes-net-sdk-es-a-modern-c-kornyezet"><span class="toc-label">1. Bevezetés, .NET SDK és a modern C# környezet</span><span class="toc-leader"></span><span class="toc-page-number">7</span></a><ul>
+<li><a href="#11-mi-a-net-es-hogyan-mukodik-a-c-a-hatterben"><span class="toc-label">1.1 Mi a .NET és hogyan működik a C# a háttérben?</span><span class="toc-leader"></span><span class="toc-page-number">7</span></a></li>
+<li><a href="#12-fejlesztoi-kornyezet-kialakitasa"><span class="toc-label">1.2 Fejlesztői környezet kialakítása</span><span class="toc-leader"></span><span class="toc-page-number">8</span></a></li>
+<li><a href="#13-az-elso-c-projektunk-a-dotnet-cli-vel"><span class="toc-label">1.3 Az első C# projektünk a dotnet CLI-vel</span><span class="toc-leader"></span><span class="toc-page-number">8</span></a></li>
+<li><a href="#14-a-modern-c-forradalma-top-level-statements"><span class="toc-label">1.4 A modern C# forradalma: Top-Level Statements</span><span class="toc-leader"></span><span class="toc-page-number">9</span></a></li>
+<li><a href="#15-interaktiv-bemenet-es-string-interpolacio"><span class="toc-label">1.5 Interaktív bemenet és string interpoláció</span><span class="toc-leader"></span><span class="toc-page-number">10</span></a></li>
+<li><a href="#16-git-gyorstalpalo-c-projektekhez"><span class="toc-label">1.6 Git gyorstalpaló C# projektekhez</span><span class="toc-leader"></span><span class="toc-page-number">10</span></a></li>
+<li><a href="#17-fejezetzaro-gyakorlatok-es-feladatok"><span class="toc-label">1.7 Fejezetzáró gyakorlatok és feladatok</span><span class="toc-leader"></span><span class="toc-page-number">11</span></a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+    </section>
+    
+    <div class="content">
+        <h1 id="a-szerzorol">A Szerzőről</h1>
+<h3 id="szeness-imre">Szeness Imre</h3>
+<p>Szeness Imre mérnökinformatikus, rendszertervező és oktató. Pályafutása során mind a nagyvállalati .NET és C# architektúrák, mind a felhőalapú mikroszolgáltatások és az elosztott rendszerek tervezésében és üzemeltetésében mély szakmai tapasztalatot szerzett. Kiemelt szakterülete a skálázható háttérrendszerek fejlesztése, a típusbiztos és tiszta szoftvertervezés, valamint a modern fejlesztői eszközök és a mesterséges intelligencia integrálása az ipari munkafolyamatokba.</p>
+<p>Az oktatásban a gyakorlati megértést és a mély mechanizmusok átlátását tartja elsődlegesnek: a programozás nem a szintaxis mechanikus bemagolását jelenti, hanem a memória működésének, a szálkezelésnek, az aszinkronitásnak és a tiszta architektúrák logikájának készségszintű elsajátítását.</p>
+<p>A könyv megírásának célja, hogy a magyar szakmai közösség számára egy teljesen naprakész, a legmodernebb .NET és C# verziókra épülő, kompromisszummentes és közvetlen hangvételű kalauzt adjon.</p>
+<hr />
+<h3 id="koszonetnyilvanitas">Köszönetnyilvánítás</h3>
+<p>Köszönöm a családomnak és a kollégáimnak a támogatást és türelmet a kötet elkészítése során. Külön köszönöm Lucának, hogy figyelmeztetett a nehezen érthető részekre, segítve, hogy a legbonyolultabb mérnöki témák is emberközeliek maradjanak.</p>
+<p>Köszönöm továbbá a .NET Foundation és a nyílt forráskódú fejlesztői közösség munkáját, amely a világ egyik leghatékonyabb fejlesztői környezetévé tette a C#-ot.</p>
+<div class="chapter-break"></div>
+
+<h1 id="eloszo">Előszó</h1>
+<blockquote>
+<p><em>„A jó kód olyan, mintha a legjobb prózát olvasnád: világos, elegáns és nem rejteget felesleges meglepetéseket.”</em></p>
+</blockquote>
+<p>Amikor a C# nyelvről beszélünk, sokaknak még ma is a régi, Windows-hoz kötött, nehézkes rendszerek jutnak eszükbe. A valóság azonban az, hogy a C# és a modern .NET az elmúlt években az iparág egyik leggyorsabb, legelegánsabb és legmodernebb cross-platform platformjává vált. Legyen szó felhőben futó Linux-alapú mikroszolgáltatásokról, nagyvállalati banki háttérrendszerekről, asztali GUI-ról vagy a Unity által hajtott videojátékokról, a C# mindenhol az élvonalban jár.</p>
+<p>Ezt a könyvet azért írtam, hogy hidat képezzen a kezdeti bizonytalanság és a professzionális, magabiztos szoftvermérnöki gondolkodás között. Nem állunk meg a „Hello World” szintjén: az alapoktól elindulva megtanuljuk a Stack és Heap memóriakezelést, a rekordok és a mintaillesztés erejét, a LINQ művészetét, az aszinkron Task modellt, az Entity Framework Core adatbázis-kezelést és a modern Minimal API-kat.</p>
+<h3 id="kinek-szol-ez-a-konyv">Kinek szól ez a könyv?</h3>
+<ul>
+<li><strong>Pályakezdőknek és autodidaktáknak:</strong> Akik a világ egyik legkeresettebb és legstabilabb vállalati technológiájával szeretnék megalapozni a karrierjüket.</li>
+<li><strong>Más nyelvekből váltóknak (Python, Java, C++, TypeScript):</strong> Akik szeretnék megérteni, mi teszi a modern C#-ot és a .NET futtatókörnyezetet annyira vonzóvá, gyorssá és kifejezővé.</li>
+<li><strong>Mérnököknek és fejlesztőknek:</strong> Akik robusztus, automatizáltan tesztelt (<code>xUnit</code>) és konténerizált (<code>Docker</code>) kódokat akarnak szállítani a termelésbe.</li>
+</ul>
+<h3 id="hogyan-hasznald-a-konyvet">Hogyan használd a könyvet?</h3>
+<p>A könyv 6 nagy logikai egységből és 31 fejezetből áll:
+* <strong>Bevezető – Tanulási Térkép és Módszertan:</strong> Hogyan használd a könyvet, kinek melyik fejezetek opcionálisak, és a tanulási útvonal.
+* <strong>I. Rész: Fundamentumok és a C# környezet (1–5. fejezet):</strong> Változók, memóriadiagramok, vezérlés és metódusok.
+* <strong>II. Rész: Objektumorientáltság és Típusrendszer (6–11. fejezet):</strong> Osztályok, Primary Constructorok, interfészek, rekordok és generics.
+* <strong>III. Rész: C# Szuperképességek és Aszinkronitás (12–17. fejezet):</strong> LINQ, <code>async</code>/<code>await</code> Task modell, JSON és hálózat.
+* <strong>IV. Rész: Vállalati Architektúra és Adatbázisok (18–20. fejezet):</strong> Dependency Injection, Serilog, Entity Framework Core.
+* <strong>V. Rész: 10 Nagy Gyakorlati Mesterprojekt (21–27. fejezet):</strong> Kész, azonnal futtatható projektek (Spectre.Console CLI, Minimal API, Web Scraper, SignalR Chat, Avalonia GUI, Játék, CQRS).
+* <strong>VI. Rész: Tesztelés, Docker és Professzionális Munkafolyamat (28–31. fejezet):</strong> xUnit tesztek, Native AOT fordítás és CI/CD.</p>
+<p>Jó tanulást és örömteli kódolást kívánok a C# modern világában!</p>
+<div class="chapter-break"></div>
+
+<h1 id="bevezeto-hogyan-tanulj-es-c-tanulasi-terkep">Bevezető: Hogyan tanulj és C# Tanulási Térkép</h1>
+<p>A programozás megtanulása nem egy elvont lexikális tudás bemagolása, hanem egy gyakorlati mérnöki készség fokozatos felépítése. A modern C# hatalmas és kifejező nyelv, de nem kell egyszerre minden egyes részletét memorizálnod ahhoz, hogy elkezdj működő, professzionális szoftvereket alkotni.</p>
+<hr />
+<h2 id="a-konyv-c-tanulasi-terkepe-learning-roadmap">A Könyv C# Tanulási Térképe (Learning Roadmap)</h2>
+<p>Az alábbi térkép segít átlátni a haladást, és kiválasztani a céljaidnak leginkább megfelelő tanulási útvonalat:</p>
+<div class="highlight"><pre><span></span><code>[1-5. C# Alapok: Változók, Stack/Heap, Vezérlés &amp; Metódusok]
+                          │
+                          ▼
+[6-8. OOP &amp; Adatmodellezés: Osztályok, Interfészek &amp; Rekordok]
+                          │
+                          ▼
+[9-11. Hibakezelés, Generics &amp; Események] ──► Mini-projekt: Memóriabeli Adattár
+                          │
+                          ▼
+[12-13. A LINQ művészete: Adatszűrés, Transzformáció &amp; PLINQ]
+                          │
+                          ▼
+[14-17. Aszinkron Világ, Taskok, I/O &amp; HTTP Hálózatkezelés]
+                          │
+                          ▼
+[18-20. Vállalati Alapok: Dependency Injection, Logging &amp; EF Core ORM]
+                          │
+                          ▼
+[21-27. 10 Nagy Mesterprojekt: CLI, Minimal API, Scraper, SignalR Chat, GUI]
+                          │
+                          ▼
+[28-31. Mérnöki Minőség: xUnit Tesztelés, Docker, Native AOT &amp; CI/CD]
+</code></pre></div>
+
+<hr />
+<h2 id="kinek-melyik-fejezetek-kihagyhatok-vagy-opcionalisak">Kinek melyik fejezetek kihagyhatók vagy opcionálisak?</h2>
+<table>
+<thead>
+<tr>
+<th>Háttértudásod</th>
+<th>Javasolt indulópont</th>
+<th>Fókusz és ajánlott útvonal</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Teljesen kezdő vagy</strong></td>
+<td>1. Fejezet</td>
+<td>Haladj szépen sorban az 1–5. fejezeten. Ne ijedj meg az elmélettől, gépeld be a kódot! A 14. fejezet (Aszinkron) és a haladóbb témák első olvasásra opcionálisak; a lényeg, hogy az OOP és a LINQ alapjai jól rögzüljenek.</td>
+</tr>
+<tr>
+<td><strong>Python / JavaScript háttérből jössz</strong></td>
+<td>2. Fejezet</td>
+<td>Különösen figyelj a típusbiztonságra, a Stack vs. Heap memóriamodellre és az Interfészekre. A LINQ azonnal otthonos lesz, a beépített Dependency Injection pedig megmutatja a vállalati szoftverek valódi erejét.</td>
+</tr>
+<tr>
+<td><strong>Java vagy C++ háttérből jössz</strong></td>
+<td>6. vagy 12. Fejezet</td>
+<td>Az alap OOP-t gyorsan átfuthatod: fókuszálj a C#-specifikus csodákra: Primary Constructors, Properties, Pattern Matching, Records, LINQ és a modern Minimal API-k.</td>
+</tr>
+<tr>
+<td><strong>Játékfejlesztő (Unity) érdeklődés</strong></td>
+<td>1–11., majd 26.</td>
+<td>Az alapok, az OOP, a generikus gyűjtemények és a 26. fejezet (Játék- és szimulációmotor) adják meg a tökéletes alapot a Unity szkripteléshez.</td>
+</tr>
+<tr>
+<td><strong>Enterprise Backend fejlesztő cél</strong></td>
+<td>12. fejezettől</td>
+<td>LINQ (12-13.), Aszinkron Taskok (14-15.), DI és EF Core (18-20.), Minimal API (22.), és xUnit tesztek (28.).</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="a-hatekony-tanulas-3-aranyszabalya">A Hatékony Tanulás 3 Aranyszabálya</h2>
+<ol>
+<li><strong>Ne csak olvasd, gépeld és futtasd!</strong><br />
+   A C# egy fordítóprogramos, szigorúan típusos nyelv. Az igazi megértés akkor születik meg, amikor a fordító hibaüzenetet ad, te pedig kibogozod és kijavítod.</li>
+<li><strong>Értsd meg a miérteket a háttérben!</strong><br />
+   Nem csak azt mutatjuk meg, hogyan kell leírni egy kódot, hanem azt is, mi történik a memóriában (Stacken vagy Heapen), és miért úgy optimalizál a .NET futtatókörnyezet (CLR).</li>
+<li><strong>Használd a fejezetzáró Mini Code Review listákat!</strong><br />
+   Minden fejezet végén találsz egy 6 pontos mérnöki ellenőrzőlistát, amellyel professzionális szintre csiszolhatod a megoldásaidat.</li>
+</ol>
+<div class="chapter-break"></div>
+
+<h1 id="1-bevezetes-net-sdk-es-a-modern-c-kornyezet">1. Bevezetés, .NET SDK és a modern C# környezet</h1>
+<p>Üdvözöllek a modern C# és a .NET izgalmas világában! Ha korábban hallottál már a C#-ról, felejtsd el az elavult sztereotípiákat: a C# ma már nem egy Windows-hoz láncolt, nehézkes technológia, hanem az iparág egyik leggyorsabb, legelegánsabb, teljesen nyílt forráskódú és platformfüggetlen fejlesztői környezete.</p>
+<p>Ebben a fejezetben megértjük a .NET platform működését, beállítjuk a fejlesztői környezetet Linuxon, macOS-en és Windowson, és megírjuk életünk első modern C# programját.</p>
+<hr />
+<h2 id="11-mi-a-net-es-hogyan-mukodik-a-c-a-hatterben">1.1 Mi a .NET és hogyan működik a C# a háttérben?</h2>
+<p>Amikor C# kódot írsz, az nem közvetlenül gépi kóddá alakul, mint a C vagy C++ esetében, de nem is futásidőben sorról sorra értelmeződik, mint a tiszta Python szkriptek. A .NET egy intelligens, kétlépcsős fordítási modellt alkalmaz:</p>
+<div class="highlight"><pre><span></span><code>  [ C# Forráskód (.cs) ]
+            │
+            ▼  (Roslyn fordító / dotnet build)
+  [ Köztes Nyelv / Bytecode (IL - Intermediate Language) (.dll) ]
+            │
+            ▼  (Common Language Runtime - CLR)
+  [ JIT Fordító (Just-In-Time Compiler) a futtatáskor ]
+            │
+            ▼
+  [ Natív Gépi Kód (CPU utasítások: x64, ARM64) ]
+</code></pre></div>
+
+<h3 id="a-rendszer-kulcselemei">A rendszer kulcselemei:</h3>
+<ol>
+<li><strong>Roslyn fordító:</strong> Amikor kiadod a <code>dotnet build</code> parancsot, a C# kódot egy platformfüggetlen köztes nyelvre (<strong>IL – Intermediate Language</strong>) fordítja.</li>
+<li><strong>CLR (Common Language Runtime):</strong> A .NET virtuális gépe (futtatókörnyezete). Ez felel a memóriakezelésért, a szemétgyűjtésért (Garbage Collection), a típusbiztonság ellenőrzéséért és a szálkezelésért.</li>
+<li><strong>JIT (Just-In-Time) fordító:</strong> Amikor elindítod a programot, a JIT fordító az IL kódot villámgyorsan átalakítja a számítógéped processzora által közvetlenül értelmezhető natív gépi kódra. Sőt, a legújabb .NET verziók képesek <strong>Native AOT</strong> (Ahead-Of-Time) fordításra is, amellyel közvetlenül, futtatókörnyezet nélkül induló natív bináris fájlt kapunk!</li>
+</ol>
+<hr />
+<h2 id="12-fejlesztoi-kornyezet-kialakitasa">1.2 Fejlesztői környezet kialakítása</h2>
+<blockquote>
+<p>[!TIP]</p>
+<h3 id="nulladik-lepes-teljesen-kezdoknek-mi-az-a-terminal-es-a-parancssor">💡 Nulladik lépés teljesen kezdőknek: Mi az a terminál és a parancssor?</h3>
+<p>Ha még soha nem programoztál: a terminál (Windowson a PowerShell vagy CMD, Linuxon/macOS-en a Bash/Zsh) nem más, mint egy közvetlen szöveges vezérlőablak a gépedhez. Nem egérrel kattintasz, hanem begépeled a parancsot (pl. <code>dotnet --version</code>), és a gép azonnal válaszol. Minden parancs, amit itt látsz, a terminálba gépelendő be.</p>
+</blockquote>
+<h3 id="1-a-net-sdk-telepitese">1. A .NET SDK telepítése</h3>
+<p>A kódoláshoz a <strong>.NET SDK</strong>-ra (Software Development Kit) van szükségünk, amely tartalmazza a fordítót, a futtatókörnyezetet és a <code>dotnet</code> parancssori eszközt.</p>
+<ul>
+<li><strong>Linux (Ubuntu / Debian):</strong>
+  <code>bash
+  sudo apt-get update &amp;&amp; sudo apt-get install -y dotnet-sdk-8.0</code></li>
+<li><strong>macOS (Homebrew-val):</strong>
+  <code>bash
+  brew install dotnet-sdk</code></li>
+<li><strong>Windows:</strong>
+  Töltsd le az ingyenes telepítőt a hivatalos oldalról: <code>https://dotnet.microsoft.com/download</code></li>
+</ul>
+<p>A telepítés ellenőrzése a terminálban:</p>
+<div class="highlight"><pre><span></span><code>dotnet<span class="w"> </span>--version
+</code></pre></div>
+
+<p>Ha megjelenik a verziószám (pl. <code>8.0.xxx</code>, <code>9.0.xxx</code> vagy <code>10.0.xxx</code>), a géped készen áll a munkára!</p>
+<h3 id="2-a-kodszerkeszto-ide">2. A kódszerkesztő (IDE)</h3>
+<p>Bármilyen szövegszerkesztő megfelel, de a két legnépszerűbb és leghatékonyabb eszköz:
+- <strong>Visual Studio Code (Ingyenes, könnyű, cross-platform):</strong> Telepítsd hozzá a hivatalos <strong>C# Dev Kit</strong> kiegészítőt.
+- <strong>Visual Studio Community (Windowsra):</strong> Nagyvállalati szintű, mindent magában foglaló ingyenes környezet.</p>
+<hr />
+<h2 id="13-az-elso-c-projektunk-a-dotnet-cli-vel">1.3 Az első C# projektünk a <code>dotnet</code> CLI-vel</h2>
+<p>Felejtsük el az egérrel való kattintgatást: a modern fejlesztők a <code>dotnet</code> parancssori eszközt használják. Hozzunk létre egy új konzolos alkalmazást!</p>
+<p>Nyiss meg egy terminált, és add ki a következő parancsokat:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># 1. Hozzunk létre egy új projektmappát:</span>
+mkdir<span class="w"> </span>ElsoCSharpProjektem
+<span class="nb">cd</span><span class="w"> </span>ElsoCSharpProjektem
+
+<span class="c1"># 2. Hozzunk létre egy új konzolos C# sablont:</span>
+dotnet<span class="w"> </span>new<span class="w"> </span>console
+
+<span class="c1"># 3. Futtassuk a projektet:</span>
+dotnet<span class="w"> </span>run
+</code></pre></div>
+
+<p>A képernyőn azonnal megjelenik:</p>
+<div class="highlight"><pre><span></span><code>Hello, World!
+</code></pre></div>
+
+<p>Nézzük meg, mi jött létre a mappánkban:
+* <strong><code>ElsoCSharpProjektem.csproj</code>:</strong> A projekt konfigurációs fájlja XML formátumban (itt szerepel a célverzió, pl. <code>&lt;TargetFramework&gt;net8.0&lt;/TargetFramework&gt;</code>).
+* <strong><code>Program.cs</code>:</strong> A tényleges C# forráskódunk!</p>
+<hr />
+<h2 id="14-a-modern-c-forradalma-top-level-statements">1.4 A modern C# forradalma: Top-Level Statements</h2>
+<p>Nyisd meg a generált <code>Program.cs</code> fájlt egy szerkesztőben! Korábban a C# hírhedt volt arról, hogy egy egyszerű szöveg kiírásához is rengeteg bonyolult formai sallang kellett:</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// RÉGI, NEHÉZKES C# (Így nézett ki régen):</span>
+<span class="k">using</span><span class="w"> </span><span class="nn">System</span><span class="p">;</span>
+
+<span class="k">namespace</span><span class="w"> </span><span class="nn">ElsoProjektem</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">internal</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">Program</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">static</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Main</span><span class="p">(</span><span class="kt">string</span><span class="p">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">&quot;Hello, World!&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>A modern C#-ban (C# 9 és afelett) mindezt elfelejthetjük! A fenti felesleges sallang helyett a <code>Program.cs</code> ma már mindössze ennyi:</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// MODERN C# (Top-Level Statements):</span>
+<span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">&quot;Helló, modern C# világ!&quot;</span><span class="p">);</span>
+</code></pre></div>
+
+<p>A háttérben a fordítóprogram láthatatlanul legenerálja a <code>Program</code> osztályt és a <code>Main</code> belépési pontot, így nekünk csak arra kell figyelnünk, ami valóban számít: a tiszta logikára!</p>
+<hr />
+<h2 id="15-interaktiv-bemenet-es-string-interpolacio">1.5 Interaktív bemenet és string interpoláció</h2>
+<p>Írjunk egy barátságos, interaktív programot, amely bekéri a felhasználó nevét és születési évét, majd üdvözli őt!</p>
+<p>Módosítsd a <code>Program.cs</code> fájl tartalmát az alábbira:</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// Interaktív üdvözlő program C# nyelven</span>
+<span class="n">Console</span><span class="p">.</span><span class="n">Write</span><span class="p">(</span><span class="s">&quot;Kérlek, add meg a neved: &quot;</span><span class="p">);</span>
+<span class="kt">string</span><span class="w"> </span><span class="n">nev</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Console</span><span class="p">.</span><span class="n">ReadLine</span><span class="p">()</span><span class="w"> </span><span class="o">??</span><span class="w"> </span><span class="s">&quot;Ismeretlen&quot;</span><span class="p">;</span>
+
+<span class="n">Console</span><span class="p">.</span><span class="n">Write</span><span class="p">(</span><span class="s">&quot;Hány éves vagy? &quot;</span><span class="p">);</span>
+<span class="kt">string</span><span class="w"> </span><span class="n">eletkorSzoveg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Console</span><span class="p">.</span><span class="n">ReadLine</span><span class="p">()</span><span class="w"> </span><span class="o">??</span><span class="w"> </span><span class="s">&quot;0&quot;</span><span class="p">;</span>
+
+<span class="c1">// Típusátalakítás: szövegből egész szám</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">eletkor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kt">int</span><span class="p">.</span><span class="n">Parse</span><span class="p">(</span><span class="n">eletkorSzoveg</span><span class="p">);</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">szuletesiEv</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">DateTime</span><span class="p">.</span><span class="n">Now</span><span class="p">.</span><span class="n">Year</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">eletkor</span><span class="p">;</span>
+
+<span class="c1">// String interpoláció a $ jellel (hasonló a Python f-stringhez):</span>
+<span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$&quot;\nÜdvözöllek, {nev}!&quot;</span><span class="p">);</span>
+<span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$&quot;Körülbelül {szuletesiEv}-ben születtél.&quot;</span><span class="p">);</span>
+</code></pre></div>
+
+<p>Futtasd a terminálból a <code>dotnet run</code> paranccsal!</p>
+<hr />
+<h2 id="16-git-gyorstalpalo-c-projektekhez">1.6 Git gyorstalpaló C# projektekhez</h2>
+<p>Minden professzionális projekt alapja a verziókövetés. A C# projekteknél különösen fontos a <code>.gitignore</code> fájl, mert a fordítás során ideiglenes bináris fájlok (<code>bin/</code>, <code>obj/</code>) jönnek létre, amelyeket szigorúan tilos gitbe menteni!</p>
+<p>A .NET CLI automatikusan tud generálni tökéletes C# <code>.gitignore</code> fájlt:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># 1. Hozzunk létre egy hivatalos .NET gitignore fájlt:</span>
+dotnet<span class="w"> </span>new<span class="w"> </span>gitignore
+
+<span class="c1"># 2. Inicializáljuk a Git-et:</span>
+git<span class="w"> </span>init
+
+<span class="c1"># 3. Készítsük el az első commitunkat:</span>
+git<span class="w"> </span>add<span class="w"> </span>.
+git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;init: elso C# projektem letrehozasa&quot;</span>
+</code></pre></div>
+
+<hr />
+<h2 id="17-fejezetzaro-gyakorlatok-es-feladatok">1.7 Fejezetzáró gyakorlatok és feladatok</h2>
+<ol>
+<li><strong>Környezetellenőrzés:</strong> Nyisd meg a terminált, és hívd meg a <code>dotnet --info</code> parancsot! Nézd meg, milyen SDK-k és futtatókörnyezetek találhatók a gépeden.</li>
+<li><strong>Karakter-banner készítő:</strong> Készíts egy konzolos C# programot, amely bekéri a felhasználó nevét a <code>Console.ReadLine()</code>-nal, majd kiírja azt egy csillagokból (<code>*</code>) álló díszkeretben!</li>
+<li><strong>Napi bölcsesség kalkulátor:</strong> Kérd be a felhasználó születési évét, és számold ki, hogy hány napot élt eddig körülbelül (<code>eletkor * 365.25</code>), majd írd ki szépen formázott f-string/interpolált formában!</li>
+</ol>
+<hr />
+<h3 id="utravalo-kis-szojegyzek-a-fejezethez">📖 Útravaló kis szójegyzék a fejezethez</h3>
+<ul>
+<li><strong>.NET SDK:</strong> Fejlesztői csomag, amely a fordítót (<code>csc</code>), a futtatót és a parancssori eszközöket tartalmazza.</li>
+<li><strong>CLR (Common Language Runtime):</strong> A .NET virtuális gépe, amely gondoskodik a program futtatásáról, memóriájáról és biztonságáról.</li>
+<li><strong>Top-Level Statements:</strong> Modern C# nyelvi funkció, amellyel a felesleges <code>class Program</code> és <code>static void Main</code> burkoló kód elhagyható.</li>
+<li><strong>String Interpoláció (<code>$""</code>):</strong> Szövegformázási technika, amellyel változókat közvetlenül a szövegbe ágyazhatunk: <code>$"Helló {nev}!"</code>.</li>
+</ul>
+<hr />
+<h4 id="mini-code-review-ellenorzolista">Mini Code Review Ellenőrzőlista</h4>
+<table>
+<thead>
+<tr>
+<th>Szempont</th>
+<th>Kérdés magadhoz</th>
+<th>Ellenőrzés</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>1. Olvashatóság</strong></td>
+<td>Betartottad a C# konvenciókat (PascalCase metódusok, camelCase lokális változók)?</td>
+<td>[ ]</td>
+</tr>
+<tr>
+<td><strong>2. Típusok</strong></td>
+<td>Megfelelő típusokat használtál (<code>string</code>, <code>int</code>) a felesleges konverziók elkerülésére?</td>
+<td>[ ]</td>
+</tr>
+<tr>
+<td><strong>3. Hibakezelés</strong></td>
+<td>Kezelted a null bemenetet a <code>??</code> operátorral?</td>
+<td>[ ]</td>
+</tr>
+<tr>
+<td><strong>4. Tesztelhetőség</strong></td>
+<td>A kód lefut hiba nélkül a <code>dotnet run</code> paranccsal?</td>
+<td>[ ]</td>
+</tr>
+<tr>
+<td><strong>5. Biztonság</strong></td>
+<td>Létrehoztad a <code>.gitignore</code> fájlt, hogy a <code>bin/</code> és <code>obj/</code> mappák ne kerüljenek gitbe?</td>
+<td>[ ]</td>
+</tr>
+<tr>
+<td><strong>6. Teljesítmény</strong></td>
+<td>Kerülted a felesleges memóriafoglalásokat?</td>
+<td>[ ]</td>
+</tr>
+</tbody>
+</table>
+    </div>
+</body>
+</html>
