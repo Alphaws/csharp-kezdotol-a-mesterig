@@ -15,6 +15,7 @@ Ezt a könyvet azért írtam, hogy hidat képezzen a kezdeti bizonytalanság és
 ### Hogyan használd a könyvet?
 
 A könyv 6 nagy logikai egységből és 31 fejezetből áll:
+
 * **Bevezető – Tanulási Térkép és Módszertan:** Hogyan használd a könyvet, kinek melyik fejezetek opcionálisak, és a tanulási útvonal.
 * **I. Rész: Fundamentumok és a C# környezet (1–5. fejezet):** Változók, memóriadiagramok, vezérlés és metódusok.
 * **II. Rész: Objektumorientáltság és Típusrendszer (6–11. fejezet):** Osztályok, Primary Constructorok, interfészek, rekordok és generics.
