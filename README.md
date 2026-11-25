@@ -4,7 +4,7 @@ A legátfogóbb modern magyar nyelvű C# és .NET szakkönyv forrásanyaga, pél
 
 - **Szerző:** Szeness Imre
 - **Kiadás:** 2026
-- **Célverzió:** .NET 8 / 9 / 10 LTS & C# 12 / 13+
+- **Célverzió:** .NET 8 / 10 LTS & .NET 11 (C# 12 / 13 / 14+)
 - **Licenc:** Minden jog fenntartva.
 
 ---

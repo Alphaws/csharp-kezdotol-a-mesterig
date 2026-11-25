@@ -23,6 +23,19 @@ Amikor C# kódot írsz, az nem közvetlenül gépi kóddá alakul, mint a C vagy
   [ Natív Gépi Kód (CPU utasítások: x64, ARM64) ]
 ```
 
+### A .NET verziók és a kiadási ciklus (LTS vs. STS)
+
+A modern szoftverfejlesztésben elengedhetetlen ismerni a technológia életciklusát. A Microsoft kiszámítható, éves ritmusban adja ki az új .NET verziókat (minden év novemberében):
+
+| Verzió | Típus | C# nyelvverzió | Szerepe a fejlesztésben | Támogatási időtartam |
+|---|---|---|---|---|
+| **.NET 8** | **LTS** | C# 12 | A jelenlegi globális nagyvállalati alappillér. Stabil, kiforrott, a legtöbb éles rendszer ezen fut. | 3 év (hosszú távú) |
+| **.NET 9** | STS | C# 13 | Gyorsabb kiadás felhő- és AI-optimalizációkkal, hibrid gyorsítótárazással (`HybridCache`). | 2 év (szabványos távú) |
+| **.NET 10** | **LTS** | C# 14 | A legfrissebb hosszú távú vállalati szabvány: új LINQ motor, zéró allokációs optimalizációk. | 3 év (hosszú távú) |
+| **.NET 11** | STS / Preview | C# 15 | A legújabb kísérleti és fejlesztői funkciók (Extension Properties, NPU integráció). | 2 év (szabványos távú) |
+
+*Tipp:* Ha a gépeden régebbi .NET 8, vagy a legfrissebb .NET 10 / .NET 11 fut (például a `11.1.100` SDK), a könyv összes alapvető kódja hibátlanul és garantáltan működni fog, hiszen a C# szigorúan ügyel a visszafelé kompatibilitásra!
+
 ### A rendszer kulcselemei:
 1. **Roslyn fordító:** Amikor kiadod a `dotnet build` parancsot, a C# kódot egy platformfüggetlen köztes nyelvre (**IL – Intermediate Language**) fordítja.
 2. **CLR (Common Language Runtime):** A .NET virtuális gépe (futtatókörnyezete). Ez felel a memóriakezelésért, a szemétgyűjtésért (Garbage Collection), a típusbiztonság ellenőrzéséért és a szálkezelésért.
