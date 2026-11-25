@@ -28,6 +28,11 @@ OUTPUT_PDF = os.path.join(PROJECT_DIR, "CSharp_Kezdotol_a_Mesterfokig.pdf")
 RAW_PDF = OUTPUT_PDF + ".raw.pdf"
 HEADER_FONT = "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"
 HEADER_FONT_BOLD = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
+BOOK_MAIN_TITLE = "C# ÉS .NET"
+BOOK_SUB_TITLE = "Kezdőtől a Mesterfokig"
+BOOK_AUTHOR_NAME = "Szeness Imre"
+BOOK_PUBLISHER_NAME = "PrStart Kiadó"
+BOOK_YEAR_VAL = "2026"
 
 def get_cover_base64():
     if os.path.exists(COVER_PATH):
@@ -189,7 +194,7 @@ def add_running_headers(input_pdf: str, output_pdf: str, chapter_files: list[str
                     current_title = title
                     break
 
-        if page_number > 0:
+        if page_number > 2:
             width = float(page.mediabox.width)
             height = float(page.mediabox.height)
             overlay_buffer = io.BytesIO()
@@ -273,6 +278,44 @@ def build_book():
         </div>
         """
 
+    title_page_html = f"""
+    <section class="inner-title-page">
+        <div class="title-author">{BOOK_AUTHOR_NAME}</div>
+        <div class="title-main">{BOOK_MAIN_TITLE}</div>
+        <div class="title-sub">{BOOK_SUB_TITLE}</div>
+        <div class="title-badge">Modern szoftverfejlesztés • .NET 8 / 10 LTS & .NET 11</div>
+        <div class="title-publisher">{BOOK_PUBLISHER_NAME}</div>
+    </section>
+    """
+
+    colophon_page_html = f"""
+    <section class="colophon-page">
+        <div class="colophon-header">
+            <strong>{BOOK_MAIN_TITLE}: {BOOK_SUB_TITLE}</strong><br>
+            Szerző: {BOOK_AUTHOR_NAME}
+        </div>
+        <div class="colophon-body">
+            <p><strong>Kiadja:</strong> {BOOK_PUBLISHER_NAME}</p>
+            <p><strong>Kiadás éve:</strong> {BOOK_YEAR_VAL}</p>
+            <p><strong>Felelős kiadó:</strong> {BOOK_PUBLISHER_NAME} vezetősége</p>
+            <p><strong>Szakmai lektorálás és szerkesztés:</strong> Szeness Imre</p>
+            <p><strong>Műszaki szerkesztés és tipográfia:</strong> PrStart Studio</p>
+            <hr class="colophon-line">
+            <p class="copyright-notice">
+                © {BOOK_YEAR_VAL} {BOOK_AUTHOR_NAME}. Minden jog fenntartva.<br>
+                A mű egészének vagy bármely részének sokszorosítása, másolása, digitális tárolása,
+                illetve bármilyen formában vagy eszközzel történő továbbadása a kiadó és a szerző
+                előzetes írásbeli engedélye nélkül tilos.
+            </p>
+            <p class="disclaimer-notice">
+                A könyvben szereplő példaprogramok és útmutatók a szerző legjobb tudása szerint készültek,
+                oktatási és szakmai ismeretterjesztési céllal. A kiadó és a szerző nem vállal felelősséget
+                a kódok közvetlen üzleti vagy éles rendszerekben történő alkalmazásából eredő esetleges károkért.
+            </p>
+        </div>
+    </section>
+    """
+
     toc_page_html = f"""
     <section class="toc-page">
         <h1>Tartalomjegyzék</h1>
@@ -284,7 +327,7 @@ def build_book():
 <html lang="hu">
 <head>
     <meta charset="UTF-8">
-    <title>Python: Kezdőtől a Mesterfokig</title>
+    <title>C# és .NET: Kezdőtől a Mesterfokig</title>
     <style>
         @page {{
             size: A4;
@@ -310,6 +353,108 @@ def build_book():
             background-color: #ffffff;
             margin: 0;
             padding: 0;
+        }}
+
+        
+        .inner-title-page {{
+            page-break-before: always;
+            page-break-after: always;
+            height: 230mm; max-height: 235mm;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            text-align: center;
+            padding: 25mm 15mm 15mm 15mm;
+            box-sizing: border-box;
+        }}
+
+        .inner-title-page .title-author {{
+            font-size: 18pt;
+            font-weight: 600;
+            color: #475569;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }}
+
+        .inner-title-page .title-main {{
+            font-size: 38pt;
+            font-weight: 800;
+            color: #0f172a;
+            letter-spacing: 1.5px;
+            margin-top: 15mm;
+            line-height: 1.15;
+        }}
+
+        .inner-title-page .title-sub {{
+            font-size: 22pt;
+            font-weight: 600;
+            color: #7c3aed;
+            margin-top: 5mm;
+            letter-spacing: 0.5px;
+        }}
+
+        .inner-title-page .title-badge {{
+            font-size: 11pt;
+            color: #64748b;
+            margin-top: 8mm;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }}
+
+        .inner-title-page .title-publisher {{
+            font-size: 16pt;
+            font-weight: 700;
+            color: #1e293b;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            border-top: 2px solid #cbd5e1;
+            padding-top: 6mm;
+            width: 60%;
+            margin-bottom: 10mm;
+        }}
+
+        .colophon-page {{
+            page-break-before: always;
+            page-break-after: always;
+            height: 230mm; max-height: 235mm;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 15mm 10mm 10mm 10mm;
+            font-size: 9.5pt;
+            line-height: 1.6;
+            color: #475569;
+            box-sizing: border-box;
+        }}
+
+        .colophon-page .colophon-header {{
+            font-size: 10.5pt;
+            color: #1e293b;
+            margin-bottom: 8mm;
+        }}
+
+        .colophon-page p {{
+            margin: 2mm 0;
+        }}
+
+        .colophon-line {{
+            border: none;
+            border-top: 1px solid #cbd5e1;
+            margin: 6mm 0;
+        }}
+
+        .colophon-page .copyright-notice {{
+            font-size: 8.5pt;
+            color: #64748b;
+            margin-top: 4mm;
+        }}
+
+        .colophon-page .disclaimer-notice {{
+            font-size: 8pt;
+            color: #94a3b8;
+            margin-top: 4mm;
+            font-style: italic;
         }}
 
         .cover-page {{
@@ -504,6 +649,8 @@ def build_book():
 </head>
 <body>
     {cover_html}
+    {title_page_html}
+    {colophon_page_html}
     {toc_page_html}
     <div class="content">
         {html_body}
