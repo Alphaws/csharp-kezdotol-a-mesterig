@@ -469,7 +469,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <li><a href="#24-elemi-adattipusok-osszefoglalo-tablazata"><span class="toc-label">2.4 Elemi adattípusok összefoglaló táblázata</span><span class="toc-leader"></span><span class="toc-page-number">19</span></a></li>
 <li><a href="#25-szovegek-string-immutabilitas-es-string-interpolacio"><span class="toc-label">2.5 Szövegek (string): Immutabilitás és String Interpoláció</span><span class="toc-leader"></span><span class="toc-page-number">20</span></a></li>
 <li><a href="#26-a-milliard-dollaros-hiba-kivedese-nullable-reference-types-t"><span class="toc-label">2.6 A „Milliárd Dolláros Hiba” kivédése: Nullable Reference Types (T?)</span><span class="toc-leader"></span><span class="toc-page-number">21</span></a></li>
-<li><a href="#27-reszletes-gyakorlati-esettanulmany-valutakonverzios-es-szamlazo-penzugyi-motor"><span class="toc-label">2.7 Részletes Gyakorlati Esettanulmány: Valutakonverziós és Számlázó Pénzügyi Motor</span><span class="toc-leader"></span><span class="toc-page-number">21</span></a></li>
+<li><a href="#27-reszletes-gyakorlati-esettanulmany-valutakonverzios-es-szamlazo-penzugyi-motor"><span class="toc-label">2.7 Részletes Gyakorlati Esettanulmány: Valutakonverziós és Számlázó Pénzügyi Motor</span><span class="toc-leader"></span><span class="toc-page-number">22</span></a></li>
 <li><a href="#28-fejezetzaro-osszefoglalo-es-gyakorlatok"><span class="toc-label">2.8 Fejezetzáró összefoglaló és gyakorlatok</span><span class="toc-leader"></span><span class="toc-page-number">24</span></a></li>
 </ul>
 </li>
@@ -815,12 +815,13 @@ git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </sp
 <blockquote>
 <p>[!IMPORTANT] A <code>var</code> nem jelent dinamikus típust!
 Nagyon sok, Pythonból vagy JavaScriptből érkező tanuló tévesen azt hiszi, hogy a <code>var</code> a C#-ban olyan, mint a Python dinamikus változói vagy a JavaScript <code>let/var</code> kulcsszava.
-<strong>Ez óriási tévedés!</strong> A C#-ban a <code>var</code> <strong>statikus típusosságot jelent</strong>:
-<code>csharp
-var szam = 42;  // A 'szam' változó típusa végérvényesen 'int' lett a fordítás pillanatában!
-// szam = "negyvenketto";  &lt;-- FORDÍTÁSI HIBA! CS0029: Cannot implicitly convert type 'string' to 'int'</code>
-A <code>var</code> csupán gépelést takarít meg a programozónak (Syntax Sugar), a kód futási sebessége és típusbiztonsága pontosan ugyanaz, mintha kiírtad volna, hogy <code>int</code>.</p>
+<strong>Ez óriási tévedés!</strong> A C#-ban a <code>var</code> <strong>statikus típusosságot jelent</strong>.</p>
 </blockquote>
+<div class="highlight"><pre><span></span><code><span class="kt">var</span><span class="w"> </span><span class="n">szam</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">42</span><span class="p">;</span><span class="w">  </span><span class="c1">// A &#39;szam&#39; változó típusa végérvényesen &#39;int&#39; lett a fordítás pillanatában!</span>
+<span class="c1">// szam = &quot;negyvenketto&quot;;  &lt;-- FORDÍTÁSI HIBA! CS0029: Cannot implicitly convert type &#39;string&#39; to &#39;int&#39;</span>
+</code></pre></div>
+
+<p>A <code>var</code> csupán gépelést takarít meg a programozónak (Syntax Sugar), a kód futási sebessége és típusbiztonsága pontosan ugyanaz, mintha kiírtad volna, hogy <code>int</code>.</p>
 <h3 id="nevadasi-konvenciok-c-ipari-szabvany">Névadási konvenciók (C# Ipari Szabvány):</h3>
 <ul>
 <li><strong><code>camelCase</code>:</strong> Kis kezdőbetű, minden további szó nagybetűvel indul. Helyi változókhoz és metódusparaméterekhez kötelező: <code>felhasznaloNev</code>, <code>aktualisEgyenleg</code>, <code>maxProbalkozas</code>.</li>
@@ -947,18 +948,20 @@ A <code>var</code> csupán gépelést takarít meg a programozónak (Syntax Suga
 </table>
 <blockquote>
 <p>[!WARNING] A lebegőpontos számok csapdája és a kötelező <code>decimal</code>
-Ahogyan azt már megtanultuk, a számítógépek a <code>float</code> és <code>double</code> típusokat kettes számrendszerben tárolják.
-Próbáld ki C#-ban:
-<code>csharp
-double d1 = 0.1;
-double d2 = 0.2;
-Console.WriteLine(d1 + d2 == 0.3); // FALSE! (Mert az eredmény 0.30000000000000004)</code>
-Ezért a C# világában létezik egy kőbe vésett törvény: <strong>Pénzügyi számításokhoz, számlázáshoz, árfolyamokhoz és bankszámlákhoz KIZÁRÓLAG a <code>decimal</code> típust szabad használni!</strong> A literál végére kötelező kitenni az <code>M</code> vagy <code>m</code> betűt:
-<code>csharp
-decimal ar1 = 0.1m;
-decimal ar2 = 0.2m;
-Console.WriteLine(ar1 + ar2 == 0.3m); // TRUE! (Garantált 100%-os pontosság!)</code></p>
+Ahogyan azt már megtanultuk, a számítógépek a <code>float</code> és <code>double</code> típusokat kettes számrendszerben tárolják.</p>
 </blockquote>
+<p>Próbáld ki C#-ban:</p>
+<div class="highlight"><pre><span></span><code><span class="kt">double</span><span class="w"> </span><span class="n">d1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.1</span><span class="p">;</span>
+<span class="kt">double</span><span class="w"> </span><span class="n">d2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.2</span><span class="p">;</span>
+<span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">d1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">d2</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mf">0.3</span><span class="p">);</span><span class="w"> </span><span class="c1">// FALSE! (Mert az eredmény 0.30000000000000004)</span>
+</code></pre></div>
+
+<p>Ezért a C# világában létezik egy kőbe vésett törvény: <strong>Pénzügyi számításokhoz, számlázáshoz, árfolyamokhoz és bankszámlákhoz KIZÁRÓLAG a <code>decimal</code> típust szabad használni!</strong> A literál végére kötelező kitenni az <code>M</code> vagy <code>m</code> betűt:</p>
+<div class="highlight"><pre><span></span><code><span class="kt">decimal</span><span class="w"> </span><span class="n">ar1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.1m</span><span class="p">;</span>
+<span class="kt">decimal</span><span class="w"> </span><span class="n">ar2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.2m</span><span class="p">;</span>
+<span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">ar1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">ar2</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mf">0.3m</span><span class="p">);</span><span class="w"> </span><span class="c1">// TRUE! (Garantált 100%-os pontosság!)</span>
+</code></pre></div>
+
 <hr />
 <h2 id="25-szovegek-string-immutabilitas-es-string-interpolacio">2.5 Szövegek (<code>string</code>): Immutabilitás és String Interpoláció</h2>
 <p>A C#-ban a szövegek (<code>string</code>) referenciatípusok, de különleges tulajdonsággal bírnak: <strong>megváltoztathatatlanok (Immutable)</strong>. Ha egy stringen műveletet hajtasz végre (pl. hozzáfűzöl egy szót), a C# a háttérben <strong>mindig egy vadonatúj string objektumot hoz létre a Heap-en</strong>, a régit pedig otthagyja a szemétgyűjtőnek.</p>

@@ -34,12 +34,14 @@ var uzenet = "Rendszer elindult";   // A fordító automatikusan 'string' típus
 
 > [!IMPORTANT] A `var` nem jelent dinamikus típust!
 > Nagyon sok, Pythonból vagy JavaScriptből érkező tanuló tévesen azt hiszi, hogy a `var` a C#-ban olyan, mint a Python dinamikus változói vagy a JavaScript `let/var` kulcsszava.
-> **Ez óriási tévedés!** A C#-ban a `var` **statikus típusosságot jelent**:
-> ```csharp
-> var szam = 42;  // A 'szam' változó típusa végérvényesen 'int' lett a fordítás pillanatában!
-> // szam = "negyvenketto";  <-- FORDÍTÁSI HIBA! CS0029: Cannot implicitly convert type 'string' to 'int'
-> ```
-> A `var` csupán gépelést takarít meg a programozónak (Syntax Sugar), a kód futási sebessége és típusbiztonsága pontosan ugyanaz, mintha kiírtad volna, hogy `int`.
+> **Ez óriási tévedés!** A C#-ban a `var` **statikus típusosságot jelent**.
+
+```csharp
+var szam = 42;  // A 'szam' változó típusa végérvényesen 'int' lett a fordítás pillanatában!
+// szam = "negyvenketto";  <-- FORDÍTÁSI HIBA! CS0029: Cannot implicitly convert type 'string' to 'int'
+```
+
+A `var` csupán gépelést takarít meg a programozónak (Syntax Sugar), a kód futási sebessége és típusbiztonsága pontosan ugyanaz, mintha kiírtad volna, hogy `int`.
 
 ### Névadási konvenciók (C# Ipari Szabvány):
 * **`camelCase`:** Kis kezdőbetű, minden további szó nagybetűvel indul. Helyi változókhoz és metódusparaméterekhez kötelező: `felhasznaloNev`, `aktualisEgyenleg`, `maxProbalkozas`.
@@ -122,18 +124,22 @@ Console.WriteLine(szamokA[0]); // 99 -> Az eredeti 'szamokA' is megváltozott!
 
 > [!WARNING] A lebegőpontos számok csapdája és a kötelező `decimal`
 > Ahogyan azt már megtanultuk, a számítógépek a `float` és `double` típusokat kettes számrendszerben tárolják.
-> Próbáld ki C#-ban:
-> ```csharp
-> double d1 = 0.1;
-> double d2 = 0.2;
-> Console.WriteLine(d1 + d2 == 0.3); // FALSE! (Mert az eredmény 0.30000000000000004)
-> ```
-> Ezért a C# világában létezik egy kőbe vésett törvény: **Pénzügyi számításokhoz, számlázáshoz, árfolyamokhoz és bankszámlákhoz KIZÁRÓLAG a `decimal` típust szabad használni!** A literál végére kötelező kitenni az `M` vagy `m` betűt:
-> ```csharp
-> decimal ar1 = 0.1m;
-> decimal ar2 = 0.2m;
-> Console.WriteLine(ar1 + ar2 == 0.3m); // TRUE! (Garantált 100%-os pontosság!)
-> ```
+
+Próbáld ki C#-ban:
+
+```csharp
+double d1 = 0.1;
+double d2 = 0.2;
+Console.WriteLine(d1 + d2 == 0.3); // FALSE! (Mert az eredmény 0.30000000000000004)
+```
+
+Ezért a C# világában létezik egy kőbe vésett törvény: **Pénzügyi számításokhoz, számlázáshoz, árfolyamokhoz és bankszámlákhoz KIZÁRÓLAG a `decimal` típust szabad használni!** A literál végére kötelező kitenni az `M` vagy `m` betűt:
+
+```csharp
+decimal ar1 = 0.1m;
+decimal ar2 = 0.2m;
+Console.WriteLine(ar1 + ar2 == 0.3m); // TRUE! (Garantált 100%-os pontosság!)
+```
 
 ---
 
